@@ -35,3 +35,4 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .home-hero-forest .home-bottom .circle-down{display:none}
 .home-hero-forest .hero-shade{bottom:140px}
 }
+@media(min-width:701px) and (max-width:1000px){.home-hero-forest .home-heading{top:80px}.home-hero-forest .home-heading>.label{font-size:9px;margin-bottom:12px}.home-hero-forest .home-heading h1{font-size:4vw}}
