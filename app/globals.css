@@ -15,3 +15,23 @@
 .event-content{padding-top:24px}.event-content h2{font-size:35px;margin:14px 0}.photo-viewer[open]{flex-direction:column;gap:20px}.photo-viewer .viewer-bottom{display:flex;align-items:center;justify-content:space-between;gap:35px;min-width:280px}.viewer-bottom button{position:static}.viewer-bottom p{text-align:center;font:300 24px Editorial,serif}.viewer-bottom small{display:block;font:10px Work,sans-serif;margin-top:8px}
 @media(max-width:700px){.home-heading{top:13%}.page-hero .display-title{font-size:13vw}.blue-copy{width:80%}.chapter-copy .action{position:relative;z-index:3}}
 html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}html:lang(am) .word{white-space:normal}html:lang(am) .nav-pages a{font-size:25px}html:lang(am) .envelope-dialog h1{font-size:clamp(36px,6vw,78px)}html:lang(am) .capsule-rsvp{font-size:10px;max-width:40%}html:lang(am) .rsvp-form-panel h2{line-height:1.5;font-size:35px}
+/* Keep the complete couple visible: art-directed images retain their natural aspect ratio. */
+.home-hero.home-hero-forest{height:auto;min-height:0;max-height:none;background:var(--pine)}
+.home-portrait{display:block;position:relative}
+.home-portrait img{display:block;width:100%;height:auto;aspect-ratio:4672/3300;object-fit:contain}
+.home-hero-forest .hero-shade{bottom:130px;background:linear-gradient(180deg,#0b1e1966,transparent 40%);pointer-events:none}
+.home-hero-forest .home-heading{top:clamp(115px,10vw,180px);left:5%;right:5%;text-align:center}
+.home-hero-forest .home-heading>.label{margin-bottom:18px}
+.home-hero-forest .home-heading h1{font-size:clamp(45px,6.8vw,118px);line-height:.95}
+.home-hero-forest .home-heading h1>span+span{text-align:center;font-size:inherit;margin-top:6px}
+.home-hero-forest .home-bottom{position:relative;inset:auto;min-height:130px;padding:28px 5%;align-items:center}
+.home-hero-forest .home-bottom .circle-down{bottom:42px}
+@media(max-width:700px){
+.home-portrait img{aspect-ratio:2/3}
+.home-hero-forest .home-heading{top:100px;left:4%;right:4%}
+.home-hero-forest .home-heading h1{font-size:9.5vw}
+.home-hero-forest .home-heading>.label{margin-bottom:14px;font-size:9px}
+.home-hero-forest .home-bottom{min-height:140px;padding:24px 6% 40px;align-items:flex-start}
+.home-hero-forest .home-bottom .circle-down{display:none}
+.home-hero-forest .hero-shade{bottom:140px}
+}
