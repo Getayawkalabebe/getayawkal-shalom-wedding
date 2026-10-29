@@ -103,3 +103,7 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .video-envelope:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
 .envelope-dialog.unfolding{animation:invitation-dissolve .5s 4.7s ease both}
 .unfolding .video-envelope{animation:none;transform:none;opacity:1}
+/* Composite the envelope over the actual page, removing the video's yellow-olive backdrop. */
+.video-envelope video{display:none}
+.video-envelope canvas{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.video-envelope{filter:drop-shadow(0 12px 18px #0002)}

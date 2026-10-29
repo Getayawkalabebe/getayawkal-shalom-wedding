@@ -41,14 +41,15 @@ function useMotion(page:string,language:Language){
 }
 
 function Envelope({open,onEnter}:{open:boolean;onEnter:()=>void}){
- const {t,language}=useWords();const dialog=useRef<HTMLDialogElement>(null);const [opening,setOpening]=useState(false);const openingVideo=useRef<HTMLVideoElement>(null);const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const {t,language}=useWords();const dialog=useRef<HTMLDialogElement>(null);const [opening,setOpening]=useState(false);const openingVideo=useRef<HTMLVideoElement>(null);const openingCanvas=useRef<HTMLCanvasElement>(null);const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  useEffect(()=>{if(open){setOpening(false);if(openingVideo.current){openingVideo.current.pause();openingVideo.current.currentTime=0}if(!dialog.current?.open)dialog.current?.showModal();document.body.style.overflow='hidden'}else{dialog.current?.close();document.body.style.overflow=''}return()=>{if(timer.current)clearTimeout(timer.current);document.body.style.overflow=''}},[open]);
+ useEffect(()=>{if(!open)return;let frame=0,last=-1;const paint=()=>{const v=openingVideo.current,c=openingCanvas.current;if(v&&c&&v.readyState>=2&&v.currentTime!==last){last=v.currentTime;const ctx=c.getContext('2d',{willReadFrequently:true});if(ctx){ctx.drawImage(v,0,0,c.width,c.height);const img=ctx.getImageData(0,0,c.width,c.height);const d=img.data;for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];const yellow=Math.min(g-r*.65,g*.88-b);if(yellow>0)d[i+3]=Math.round(255*(1-Math.min(1,yellow/9)))}ctx.putImageData(img,0,0)}}frame=requestAnimationFrame(paint)};frame=requestAnimationFrame(paint);return()=>cancelAnimationFrame(frame)},[open]);
  function enter(){if(opening)return;setOpening(true);void openingVideo.current?.play().catch(()=>onEnter());timer.current=setTimeout(onEnter,matchMedia('(prefers-reduced-motion: reduce)').matches?0:5600)}
  return <dialog ref={dialog} className={'envelope-dialog '+(opening?'unfolding':'')} onCancel={e=>{e.preventDefault();enter()}} aria-labelledby="letter-title">
   <div className="invitation-lines" aria-hidden="true"/><p className="label envelope-label">{t('A letter for you')}</p>
   <h1 id="letter-title">{t('You’re invited')}</h1>
   <button className="paper-envelope video-envelope" onClick={enter} disabled={opening} aria-label={t('Open invitation')}>
-   <video ref={openingVideo} src="/envelope-opening.mp4" muted playsInline preload="auto" onEnded={onEnter} aria-hidden="true"/>
+   <video ref={openingVideo} src="/envelope-opening.mp4" muted playsInline preload="auto" onEnded={onEnter} aria-hidden="true"/><canvas ref={openingCanvas} width="720" height="720" aria-hidden="true"/>
   </button>
   <button className="action envelope-action" onClick={enter} disabled={opening}><Rolling>{'Open invitation'}</Rolling><Arrow/></button>
   <p className="envelope-names">Getayawkal <i>&</i> Shalom</p><p className="label envelope-date">{language==='am'?'ህዳር 12 2019 አ.ም · አዲስ አበባ':'21 November 2026 · Addis Ababa'}</p>
