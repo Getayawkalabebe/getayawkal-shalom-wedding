@@ -1836,13 +1836,11 @@ export default function WeddingSite({ initialPage }: { initialPage: string }) {
     if (page === next) {
       history.pushState({}, '', url.pathname + url.hash);
       if (url.hash)
-        document
-          .getElementById(url.hash.slice(1))
-          ?.scrollIntoView({
-            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-              ? 'instant'
-              : 'smooth',
-          });
+        document.getElementById(url.hash.slice(1))?.scrollIntoView({
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'instant'
+            : 'smooth',
+        });
       else window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
