@@ -47,8 +47,8 @@ function Envelope({open,onEnter}:{open:boolean;onEnter:()=>void}){
  return <dialog ref={dialog} className={'envelope-dialog '+(opening?'unfolding':'')} onCancel={e=>{e.preventDefault();enter()}} aria-labelledby="letter-title">
   <div className="invitation-lines" aria-hidden="true"/><p className="label envelope-label">{t('A letter for you')}</p>
   <h1 id="letter-title">{t('You’re invited')}</h1>
-  <button className="paper-envelope red-envelope" onClick={enter} disabled={opening} aria-label={t('Open invitation')}>
-   <span className="paper-back"/><span className="paper-letter"><Mark/><span>{t('With love, always.')}</span><small>21 · 11 · 2026</small></span><span className="paper-face"/><span className="paper-fold"/>
+  <button className="paper-envelope artwork-envelope" onClick={enter} disabled={opening} aria-label={t('Open invitation')}>
+   <span className="artwork-layer artwork-back"/><span className="artwork-layer artwork-card"/><span className="artwork-layer artwork-front"/>
   </button>
   <button className="action envelope-action" onClick={enter} disabled={opening}><Rolling>{'Open invitation'}</Rolling><Arrow/></button>
   <p className="envelope-names">Getayawkal <i>&</i> Shalom</p><p className="label envelope-date">{language==='am'?'ህዳር 12 2019 አ.ም · አዲስ አበባ':'21 November 2026 · Addis Ababa'}</p>
