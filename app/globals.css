@@ -111,3 +111,11 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .video-envelope:focus-visible{outline:none!important}
 .video-envelope .sealed-poster{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
 .video-envelope canvas{position:relative;z-index:1}
+.home-hero-portrait .home-portrait{width:55%;margin-left:45%}
+.home-hero-portrait .home-portrait img{aspect-ratio:2/3;width:100%;height:auto}
+.home-hero-portrait .home-heading{left:4%;right:59%;top:28%;text-align:left}
+.home-hero-portrait .home-heading h1{font-size:4.2vw;line-height:1.15}
+.home-hero-portrait .home-heading h1>span+span{text-align:left}
+.home-hero-portrait .hero-shade{display:none}
+.home-faith{padding:85px 8%}
+@media(max-width:700px){.home-hero-portrait .home-portrait{width:100%;margin-left:0}.home-hero-portrait .home-heading{top:80px;left:5%;right:5%;text-align:center;color:var(--pine)}.home-hero-portrait .home-heading h1{font-size:9vw;line-height:1}.home-hero-portrait .home-heading h1>span+span{text-align:center}.home-hero-portrait .home-heading>.label{font-size:9px;margin-bottom:10px}.home-faith{padding:65px 7%}}
