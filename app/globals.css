@@ -69,3 +69,10 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 @media(max-height:740px){.artwork-envelope{width:230px}.envelope-dialog h1{margin-bottom:20px}.envelope-names{margin-top:18px}}
 @media(prefers-reduced-motion:reduce){.unfolding .artwork-envelope,.unfolding .artwork-card,.unfolding .artwork-front{animation:none!important}}
 .artwork-back{clip-path:polygon(24% 25%,50% 0,76% 25%)}
+/* Preserve the supplied artwork as one seamless image; polygon slices produced visible gaps. */
+.artwork-envelope{border:0;outline:0;background:transparent;box-shadow:none;flex-shrink:0}
+.artwork-envelope:focus-visible{outline:2px solid var(--gold);outline-offset:8px;border-radius:3px}
+.artwork-envelope .artwork-back{clip-path:none;z-index:1}
+.artwork-envelope .artwork-card,.artwork-envelope .artwork-front{display:none}
+.unfolding .artwork-envelope{animation:artwork-seamless-open 2.2s cubic-bezier(.22,.61,.36,1) both}
+@keyframes artwork-seamless-open{0%{transform:translateY(0) scale(1);opacity:1}30%{transform:translateY(-10px) scale(1.025);opacity:1}65%{transform:translateY(-20px) scale(1.1);opacity:1}100%{transform:translateY(-35px) scale(1.2);opacity:0}}
