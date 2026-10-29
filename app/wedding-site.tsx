@@ -43,12 +43,12 @@ function useMotion(page:string,language:Language){
 function Envelope({open,onEnter}:{open:boolean;onEnter:()=>void}){
  const {t,language}=useWords();const dialog=useRef<HTMLDialogElement>(null);const [opening,setOpening]=useState(false);const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  useEffect(()=>{if(open){setOpening(false);if(!dialog.current?.open)dialog.current?.showModal();document.body.style.overflow='hidden'}else{dialog.current?.close();document.body.style.overflow=''}return()=>{if(timer.current)clearTimeout(timer.current);document.body.style.overflow=''}},[open]);
- function enter(){if(opening)return;setOpening(true);timer.current=setTimeout(onEnter,matchMedia('(prefers-reduced-motion: reduce)').matches?0:2200)}
+ function enter(){if(opening)return;setOpening(true);timer.current=setTimeout(onEnter,matchMedia('(prefers-reduced-motion: reduce)').matches?0:3400)}
  return <dialog ref={dialog} className={'envelope-dialog '+(opening?'unfolding':'')} onCancel={e=>{e.preventDefault();enter()}} aria-labelledby="letter-title">
   <div className="invitation-lines" aria-hidden="true"/><p className="label envelope-label">{t('A letter for you')}</p>
   <h1 id="letter-title">{t('You’re invited')}</h1>
   <button className="paper-envelope artwork-envelope" onClick={enter} disabled={opening} aria-label={t('Open invitation')}>
-   <span className="artwork-layer artwork-back"/><span className="artwork-layer artwork-card"/><span className="artwork-layer artwork-front"/>
+   <span className="artwork-layer artwork-back"/><span className="artwork-layer artwork-card"/><span className="artwork-layer artwork-front"/><span className="sealed-body" aria-hidden="true"/><span className="sealed-flap" aria-hidden="true"/><span className="sealed-wax" aria-hidden="true"><Mark/></span>
   </button>
   <button className="action envelope-action" onClick={enter} disabled={opening}><Rolling>{'Open invitation'}</Rolling><Arrow/></button>
   <p className="envelope-names">Getayawkal <i>&</i> Shalom</p><p className="label envelope-date">{language==='am'?'ህዳር 12 2019 አ.ም · አዲስ አበባ':'21 November 2026 · Addis Ababa'}</p>

@@ -76,3 +76,19 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .artwork-envelope .artwork-card,.artwork-envelope .artwork-front{display:none}
 .unfolding .artwork-envelope{animation:artwork-seamless-open 2.2s cubic-bezier(.22,.61,.36,1) both}
 @keyframes artwork-seamless-open{0%{transform:translateY(0) scale(1);opacity:1}30%{transform:translateY(-10px) scale(1.025);opacity:1}65%{transform:translateY(-20px) scale(1.1);opacity:1}100%{transform:translateY(-35px) scale(1.2);opacity:0}}
+/* Closed envelope opens onto the complete supplied invitation artwork. */
+.artwork-envelope{perspective:1100px}
+.artwork-envelope .artwork-back{opacity:0;transition:opacity .25s .55s}
+.sealed-body,.sealed-flap{position:absolute;left:7.4%;right:7.4%;top:44.8%;bottom:1.7%;background-image:url('/red-invitation-artwork.png');background-size:117.4% 190%;background-position:center bottom}
+.sealed-body{z-index:3;box-shadow:0 8px 20px #0002;clip-path:polygon(0 0,50% 43%,100% 0,100% 100%,0 100%)}
+.sealed-flap{z-index:4;transform-origin:50% 0;clip-path:polygon(0 0,100% 0,52% 62%,50% 63%,48% 62%);background-position:50% 95%;filter:brightness(.78);backface-visibility:hidden;transition:transform .85s cubic-bezier(.3,.1,.2,1),opacity .2s .65s}
+.sealed-wax{position:absolute;z-index:5;left:44%;top:70%;width:12%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:radial-gradient(ellipse at 35% 25%,#b24434,#7a1516 65%,#51090e);box-shadow:0 3px 7px #0005,inset 0 0 0 2px #ae4b3955;color:#d6aa79;transition:opacity .25s,transform .35s}
+.sealed-wax .brand-mark{font-size:18px}.sealed-wax .brand-mark i{font-size:11px}
+.unfolding .artwork-envelope .artwork-back{opacity:1}
+.unfolding .sealed-flap{transform:rotateX(180deg);opacity:0}
+.unfolding .sealed-body{opacity:0;transition:opacity .4s .7s}
+.unfolding .sealed-wax{opacity:0;transform:scale(.8) translateY(8px)}
+.unfolding .artwork-envelope{animation:sealed-invitation-reveal 3.4s ease both}
+.envelope-dialog.unfolding{animation:invitation-dissolve .6s 2.8s ease both}
+@keyframes sealed-invitation-reveal{0%,25%{transform:translateY(0);opacity:1}45%,78%{transform:translateY(-12px) scale(1.035);opacity:1}100%{transform:translateY(-25px) scale(1.12);opacity:0}}
+@media(prefers-reduced-motion:reduce){.sealed-body,.sealed-flap,.sealed-wax,.artwork-envelope .artwork-back{transition:none!important}}
