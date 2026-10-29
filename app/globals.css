@@ -36,3 +36,21 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .home-hero-forest .hero-shade{bottom:140px}
 }
 @media(min-width:701px) and (max-width:1000px){.home-hero-forest .home-heading{top:80px}.home-hero-forest .home-heading>.label{font-size:9px;margin-bottom:12px}.home-hero-forest .home-heading h1{font-size:4vw}}
+/* Burgundy folded paper, inspired by the supplied red invitation. */
+.red-envelope{isolation:isolate;transform-style:preserve-3d;transition:filter .3s;--red-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23ffffff' opacity='.16' filter='url(%23n)' d='M0 0h140v140H0z'/%3E%3C/svg%3E")}
+.red-envelope .paper-back{background:var(--red-grain),linear-gradient(135deg,#600b0c,#8a1617);box-shadow:inset 0 0 0 1px #3e030944}
+.red-envelope .paper-face{background:var(--red-grain),linear-gradient(150deg,#9e2523,#70100f 65%,#891a17);clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%);box-shadow:inset 0 -1px 2px #31000066}
+.red-envelope .paper-face:after{content:'';position:absolute;inset:0;background:var(--red-grain),linear-gradient(165deg,#a52c27,#7e1513);clip-path:polygon(0 100%,50% 48%,100% 100%);filter:drop-shadow(0 -1px 1px #39000088)}
+.red-envelope .paper-fold{background:var(--red-grain),linear-gradient(160deg,#981e1d,#6c090b);clip-path:polygon(0 0,100% 0,52% 62%,50% 63%,48% 62%);backface-visibility:visible;transition:none;box-shadow:inset 0 1px 1px #c6503633}
+.red-envelope .paper-letter{inset:9px 18px 14px;color:#861a19;background:linear-gradient(120deg,#fffdf1,#eae3cf);gap:16px;clip-path:polygon(0 2%,3% 1%,7% 2%,11% 0,15% 1%,21% 0,27% 2%,33% 1%,40% 2%,47% 0,54% 1%,61% 0,69% 2%,76% 1%,83% 2%,90% 0,96% 1%,100% 2%,99% 98%,94% 99%,88% 98%,80% 100%,73% 99%,65% 100%,56% 98%,49% 99%,40% 98%,32% 100%,23% 99%,15% 100%,7% 98%,0 99%);transition:none}
+.red-envelope .paper-letter .brand-mark{font-size:40px}
+.red-envelope .paper-letter>span:nth-child(2){font-size:24px}
+.unfolding .red-envelope{animation:red-envelope-exit 2.2s ease both;opacity:1}
+.unfolding .red-envelope .paper-fold{animation:red-flap-open .8s cubic-bezier(.3,.05,.2,1) both}
+.unfolding .red-envelope .paper-letter{animation:red-letter-rise 1.45s .45s cubic-bezier(.2,.65,.2,1) both}
+.envelope-dialog.unfolding{animation:invitation-dissolve .55s 1.65s ease both;pointer-events:none}
+@keyframes red-flap-open{0%{transform:rotateX(0deg);z-index:4}49%{z-index:4}50%,100%{z-index:0}100%{transform:rotateX(180deg)}}
+@keyframes red-letter-rise{0%{transform:translateY(0);z-index:2}65%{transform:translateY(-65%);z-index:2}66%{z-index:6}100%{transform:translateY(-72%) scale(1.08);z-index:6}}
+@keyframes red-envelope-exit{0%,65%{transform:translateY(0);opacity:1}100%{transform:translateY(65px) scale(1.08);opacity:0}}
+@keyframes invitation-dissolve{to{opacity:0}}
+@media(prefers-reduced-motion:reduce){.unfolding .red-envelope,.unfolding .red-envelope .paper-fold,.unfolding .red-envelope .paper-letter,.envelope-dialog.unfolding{animation:none!important}}
