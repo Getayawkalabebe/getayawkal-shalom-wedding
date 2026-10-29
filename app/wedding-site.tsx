@@ -1,154 +1,2010 @@
 'use client';
 
-import React,{createContext,useContext,useEffect,useRef,useState,type CSSProperties,type FormEvent,type ReactNode} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import previousTranslations from '../public/translations-am.json';
-import {date,maps,telegram,pageNames,navigation,photos,events,extraAm} from './wedding-data';
+import {
+  date,
+  maps,
+  telegram,
+  pageNames,
+  navigation,
+  photos,
+  events,
+  extraAm,
+} from './wedding-data';
 
-type Language='en'|'am';
-const LanguageContext=createContext({language:'en' as Language,t:(text:string)=>text});
-const useWords=()=>useContext(LanguageContext);
-const photo=(id:string)=>'/photos/'+id+'.webp';
-const pad=(n:number)=>String(n).padStart(2,'0');
-function Arrow({down=false}:{down?:boolean}){return <svg width="27" height="15" viewBox="0 0 27 15" fill="none" aria-hidden="true" className={down?'arrow down':'arrow'}><path d="M1 7.5H25M19 1.5L25 7.5L19 13.5" stroke="currentColor" strokeWidth="1"/></svg>}
-function Mark(){return <span className="brand-mark" aria-hidden="true"><span>G</span><i>&</i><span>S</span></span>}
-function Rolling({children}:{children:string}){const {t}=useWords();return <span className="rolling"><span>{t(children)}</span><span aria-hidden="true">{t(children)}</span></span>}
-function Action({href,children,fill=false,external=false}:{href:string;children:string;fill?:boolean;external?:boolean}){return <a className={'action '+(fill?'filled':'')} href={href} data-local={!external||undefined} target={external?'_blank':undefined} rel={external?'noopener noreferrer':undefined}><Rolling>{children}</Rolling><Arrow/></a>}
-function Label({children}:{children:string}){const {t}=useWords();return <p className="label">{t(children)}</p>}
-function Words({children,as:Tag='h2',className=''}:{children:string;as?:'h1'|'h2'|'h3'|'p';className?:string}){
- const {t}=useWords();const translated=t(children);
- return <Tag className={'word-reveal '+className} data-reveal aria-label={translated}>{translated.split(' ').map((word,i)=><span className="word" aria-hidden="true" key={i} style={{'--delay':Math.min(i*.026,.75)+'s'} as CSSProperties}>{word}{' '}</span>)}</Tag>;
+type Language = 'en' | 'am';
+const LanguageContext = createContext({
+  language: 'en' as Language,
+  t: (text: string) => text,
+});
+const useWords = () => useContext(LanguageContext);
+const photo = (id: string) => '/photos/' + id + '.webp';
+const pad = (n: number) => String(n).padStart(2, '0');
+function Arrow({ down = false }: { down?: boolean }) {
+  return (
+    <svg
+      width="27"
+      height="15"
+      viewBox="0 0 27 15"
+      fill="none"
+      aria-hidden="true"
+      className={down ? 'arrow down' : 'arrow'}
+    >
+      <path
+        d="M1 7.5H25M19 1.5L25 7.5L19 13.5"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+    </svg>
+  );
 }
-function Photo({id,alt='',className='',priority=false}:{id:string;alt?:string;className?:string;priority?:boolean}){return <img className={className} src={photo(id)} alt={alt||photos.find(p=>p.id===id)?.alt||''} loading={priority?'eager':'lazy'} fetchPriority={priority?'high':'auto'} decoding="async"/>}
+function Mark() {
+  return (
+    <span className="brand-mark" aria-hidden="true">
+      <span>G</span>
+      <i>&</i>
+      <span>S</span>
+    </span>
+  );
+}
+function Rolling({ children }: { children: string }) {
+  const { t } = useWords();
+  return (
+    <span className="rolling">
+      <span>{t(children)}</span>
+      <span aria-hidden="true">{t(children)}</span>
+    </span>
+  );
+}
+function Action({
+  href,
+  children,
+  fill = false,
+  external = false,
+}: {
+  href: string;
+  children: string;
+  fill?: boolean;
+  external?: boolean;
+}) {
+  return (
+    <a
+      className={'action ' + (fill ? 'filled' : '')}
+      href={href}
+      data-local={!external || undefined}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+    >
+      <Rolling>{children}</Rolling>
+      <Arrow />
+    </a>
+  );
+}
+function Label({ children }: { children: string }) {
+  const { t } = useWords();
+  return <p className="label">{t(children)}</p>;
+}
+function Words({
+  children,
+  as: Tag = 'h2',
+  className = '',
+}: {
+  children: string;
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  className?: string;
+}) {
+  const { t } = useWords();
+  const translated = t(children);
+  return (
+    <Tag
+      className={'word-reveal ' + className}
+      data-reveal
+      aria-label={translated}
+    >
+      {translated.split(' ').map((word, i) => (
+        <span
+          className="word"
+          aria-hidden="true"
+          key={i}
+          style={
+            { '--delay': Math.min(i * 0.026, 0.75) + 's' } as CSSProperties
+          }
+        >
+          {word}{' '}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+function Photo({
+  id,
+  alt = '',
+  className = '',
+  priority = false,
+}: {
+  id: string;
+  alt?: string;
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <img
+      className={className}
+      src={photo(id)}
+      alt={alt || photos.find((p) => p.id === id)?.alt || ''}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  );
+}
 
-function useMotion(page:string,language:Language){
- useEffect(()=>{
-  const media=matchMedia('(prefers-reduced-motion: reduce)');
-  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');observer.unobserve(e.target)}}),{threshold:.12});
-  document.querySelectorAll('[data-reveal]').forEach(el=>observer.observe(el));
-  let frame=0;
-  const scenes=[...document.querySelectorAll<HTMLElement>('[data-scene]')];
-  const parallax=[...document.querySelectorAll<HTMLElement>('[data-parallax]')];
-  const expand=[...document.querySelectorAll<HTMLElement>('[data-expand]')];
-  function paint(){frame=0;const vh=innerHeight;
-   parallax.forEach(el=>{const r=el.getBoundingClientRect();if(r.bottom>0&&r.top<vh)el.style.setProperty('--parallax',media.matches?'0px':Math.max(-45,Math.min(45,(vh/2-r.top-r.height/2)*.065))+'px')});
-   scenes.forEach(el=>{const r=el.getBoundingClientRect();const p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-vh)));const step=Math.floor(p*3);el.dataset.step=String(step);el.style.setProperty('--progress',String(p));el.querySelectorAll<HTMLElement>('.scene-panel').forEach((panel,i)=>{panel.inert=!media.matches&&i!==step;panel.setAttribute('aria-hidden',String(!media.matches&&i!==step))})});
-   expand.forEach(el=>{const r=el.getBoundingClientRect();const p=media.matches?1:Math.max(0,Math.min(1,(vh-r.top)/(vh*.9)));el.style.setProperty('--expansion',String(p))});
+function useMotion(page: string, language: Language) {
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('revealed');
+            observer.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12 },
+    );
+    document
+      .querySelectorAll('[data-reveal]')
+      .forEach((el) => observer.observe(el));
+    let frame = 0;
+    const scenes = [...document.querySelectorAll<HTMLElement>('[data-scene]')];
+    const parallax = [
+      ...document.querySelectorAll<HTMLElement>('[data-parallax]'),
+    ];
+    const expand = [...document.querySelectorAll<HTMLElement>('[data-expand]')];
+    function paint() {
+      frame = 0;
+      const vh = innerHeight;
+      parallax.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < vh)
+          el.style.setProperty(
+            '--parallax',
+            media.matches
+              ? '0px'
+              : Math.max(
+                  -45,
+                  Math.min(45, (vh / 2 - r.top - r.height / 2) * 0.065),
+                ) + 'px',
+          );
+      });
+      scenes.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const p = Math.max(
+          0,
+          Math.min(0.999, -r.top / Math.max(1, r.height - vh)),
+        );
+        const step = Math.floor(p * 3);
+        el.dataset.step = String(step);
+        el.style.setProperty('--progress', String(p));
+        el.querySelectorAll<HTMLElement>('.scene-panel').forEach((panel, i) => {
+          panel.inert = !media.matches && i !== step;
+          panel.setAttribute(
+            'aria-hidden',
+            String(!media.matches && i !== step),
+          );
+        });
+      });
+      expand.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const p = media.matches
+          ? 1
+          : Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.9)));
+        el.style.setProperty('--expansion', String(p));
+      });
+    }
+    const queue = () => {
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    paint();
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue);
+    media.addEventListener('change', queue);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      removeEventListener('scroll', queue);
+      removeEventListener('resize', queue);
+      media.removeEventListener('change', queue);
+    };
+  }, [page, language]);
+}
+
+function Envelope({
+  open,
+  onEnter,
+  onStart,
+}: {
+  open: boolean;
+  onEnter: () => void;
+  onStart: () => void;
+}) {
+  const { t, language } = useWords();
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [opening, setOpening] = useState(false);
+  const openingVideo = useRef<HTMLVideoElement>(null);
+  const openingCanvas = useRef<HTMLCanvasElement>(null);
+  const [frameReady, setFrameReady] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (open) {
+      setOpening(false);
+      if (openingVideo.current) {
+        openingVideo.current.pause();
+        openingVideo.current.currentTime = 0;
+      }
+      if (!dialog.current?.open) dialog.current?.showModal();
+      document.body.style.overflow = 'hidden';
+    } else {
+      dialog.current?.close();
+      document.body.style.overflow = '';
+    }
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    let frame = 0,
+      last = -1;
+    const paint = () => {
+      const v = openingVideo.current,
+        c = openingCanvas.current;
+      if (v && c && v.readyState >= 2 && v.currentTime !== last) {
+        last = v.currentTime;
+        const ctx = c.getContext('2d', { willReadFrequently: true });
+        if (ctx) {
+          ctx.drawImage(v, 0, 0, c.width, c.height);
+          const img = ctx.getImageData(0, 0, c.width, c.height);
+          const d = img.data;
+          for (let i = 0; i < d.length; i += 4) {
+            const r = d[i],
+              g = d[i + 1],
+              b = d[i + 2];
+            const yellow = Math.min(g - r * 0.65, g * 0.88 - b);
+            if (yellow > 0)
+              d[i + 3] = Math.round(255 * (1 - Math.min(1, yellow / 9)));
+          }
+          ctx.putImageData(img, 0, 0);
+          setFrameReady(true);
+        }
+      }
+      frame = requestAnimationFrame(paint);
+    };
+    frame = requestAnimationFrame(paint);
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
+  function enter() {
+    if (opening) return;
+    onStart();
+    setOpening(true);
+    void openingVideo.current?.play().catch(() => onEnter());
+    timer.current = setTimeout(
+      onEnter,
+      matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 5600,
+    );
   }
-  const queue=()=>{if(!frame)frame=requestAnimationFrame(paint)};
-  paint();addEventListener('scroll',queue,{passive:true});addEventListener('resize',queue);media.addEventListener('change',queue);
-  return()=>{observer.disconnect();cancelAnimationFrame(frame);removeEventListener('scroll',queue);removeEventListener('resize',queue);media.removeEventListener('change',queue)};
- },[page,language]);
+  return (
+    <dialog
+      ref={dialog}
+      className={'envelope-dialog ' + (opening ? 'unfolding' : '')}
+      onCancel={(e) => {
+        e.preventDefault();
+        enter();
+      }}
+      aria-labelledby="letter-title"
+    >
+      <div className="invitation-lines" aria-hidden="true" />
+      <p className="label envelope-label">{t('A letter for you')}</p>
+      <h1 id="letter-title">{t('You’re invited')}</h1>
+      <button
+        className="paper-envelope video-envelope"
+        onClick={enter}
+        disabled={opening}
+        aria-label={t('Open invitation')}
+      >
+        <img
+          className="sealed-poster"
+          src="/envelope-sealed.svg"
+          alt="Sealed red wedding invitation"
+          style={{ opacity: frameReady ? 0 : 1 }}
+        />
+        <video
+          ref={openingVideo}
+          src="/envelope-opening.mp4"
+          muted
+          playsInline
+          preload="auto"
+          onEnded={onEnter}
+          aria-hidden="true"
+        />
+        <canvas
+          ref={openingCanvas}
+          width="720"
+          height="720"
+          aria-hidden="true"
+        />
+      </button>
+      <button
+        className="action envelope-action"
+        onClick={enter}
+        disabled={opening}
+      >
+        <Rolling>{'Open invitation'}</Rolling>
+        <Arrow />
+      </button>
+      <p className="envelope-names">
+        Getayawkal <i>&</i> Shalom
+      </p>
+      <p className="label envelope-date">
+        {language === 'am'
+          ? 'ህዳር 12 2019 አ.ም · አዲስ አበባ'
+          : '21 November 2026 · Addis Ababa'}
+      </p>
+    </dialog>
+  );
 }
 
-function Envelope({open,onEnter,onStart}:{open:boolean;onEnter:()=>void;onStart:()=>void}){
- const {t,language}=useWords();const dialog=useRef<HTMLDialogElement>(null);const [opening,setOpening]=useState(false);const openingVideo=useRef<HTMLVideoElement>(null);const openingCanvas=useRef<HTMLCanvasElement>(null);const [frameReady,setFrameReady]=useState(false);const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
- useEffect(()=>{if(open){setOpening(false);if(openingVideo.current){openingVideo.current.pause();openingVideo.current.currentTime=0}if(!dialog.current?.open)dialog.current?.showModal();document.body.style.overflow='hidden'}else{dialog.current?.close();document.body.style.overflow=''}return()=>{if(timer.current)clearTimeout(timer.current);document.body.style.overflow=''}},[open]);
- useEffect(()=>{if(!open)return;let frame=0,last=-1;const paint=()=>{const v=openingVideo.current,c=openingCanvas.current;if(v&&c&&v.readyState>=2&&v.currentTime!==last){last=v.currentTime;const ctx=c.getContext('2d',{willReadFrequently:true});if(ctx){ctx.drawImage(v,0,0,c.width,c.height);const img=ctx.getImageData(0,0,c.width,c.height);const d=img.data;for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];const yellow=Math.min(g-r*.65,g*.88-b);if(yellow>0)d[i+3]=Math.round(255*(1-Math.min(1,yellow/9)))}ctx.putImageData(img,0,0);setFrameReady(true)}}frame=requestAnimationFrame(paint)};frame=requestAnimationFrame(paint);return()=>cancelAnimationFrame(frame)},[open]);
- function enter(){if(opening)return;onStart();setOpening(true);void openingVideo.current?.play().catch(()=>onEnter());timer.current=setTimeout(onEnter,matchMedia('(prefers-reduced-motion: reduce)').matches?0:5600)}
- return <dialog ref={dialog} className={'envelope-dialog '+(opening?'unfolding':'')} onCancel={e=>{e.preventDefault();enter()}} aria-labelledby="letter-title">
-  <div className="invitation-lines" aria-hidden="true"/><p className="label envelope-label">{t('A letter for you')}</p>
-  <h1 id="letter-title">{t('You’re invited')}</h1>
-  <button className="paper-envelope video-envelope" onClick={enter} disabled={opening} aria-label={t('Open invitation')}>
-   <img className="sealed-poster" src="/envelope-sealed.svg" alt="Sealed red wedding invitation" style={{opacity:frameReady?0:1}}/><video ref={openingVideo} src="/envelope-opening.mp4" muted playsInline preload="auto" onEnded={onEnter} aria-hidden="true"/><canvas ref={openingCanvas} width="720" height="720" aria-hidden="true"/>
-  </button>
-  <button className="action envelope-action" onClick={enter} disabled={opening}><Rolling>{'Open invitation'}</Rolling><Arrow/></button>
-  <p className="envelope-names">Getayawkal <i>&</i> Shalom</p><p className="label envelope-date">{language==='am'?'ህዳር 12 2019 አ.ም · አዲስ አበባ':'21 November 2026 · Addis Ababa'}</p>
- </dialog>;
+function Navigation({
+  open,
+  setOpen,
+  language,
+  setLanguage,
+}: {
+  open: boolean;
+  setOpen: (o: boolean) => void;
+  language: Language;
+  setLanguage: (l: Language) => void;
+}) {
+  const { t } = useWords();
+  const nav = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const main = document.getElementById('page-content');
+    if (main) main.inert = true;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        nav.current?.querySelector<HTMLButtonElement>('.menu-toggle')?.focus();
+      }
+      if (e.key === 'Tab') {
+        const focusable =
+          nav.current?.querySelectorAll<HTMLElement>('a,button');
+        if (!focusable?.length) return;
+        const first = focusable[0],
+          last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      if (main) main.inert = false;
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open, setOpen]);
+  return (
+    <>
+      <div
+        className={'menu-shade ' + (open ? 'active' : '')}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+      <nav
+        className={'capsule ' + (open ? 'expanded' : '')}
+        ref={nav}
+        aria-label="Main navigation"
+      >
+        <div className="capsule-bar">
+          <button
+            className="menu-toggle"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-controls="navigation-panel"
+          >
+            <span className="menu-icon" aria-hidden="true">
+              <i />
+              <i />
+            </span>
+            {t(open ? 'Close' : 'Menu')}
+          </button>
+          <a
+            className="capsule-brand"
+            href="/invitation"
+            data-local
+            aria-label="Getayawkal and Shalom home"
+          >
+            <Mark />
+          </a>
+          <a className="capsule-rsvp" href="/rsvp" data-local>
+            <Rolling>{'Kindly RSVP'}</Rolling>
+            <Arrow />
+          </a>
+        </div>
+        <div
+          className="navigation-panel"
+          id="navigation-panel"
+          inert={!open}
+          aria-hidden={!open}
+        >
+          <p className="nav-wordmark">
+            Getayawkal
+            <br />
+            <i>&</i> Shalom
+          </p>
+          <div className="nav-pages">
+            {navigation.map(([href, name], i) => (
+              <a
+                href={href}
+                data-local
+                key={href}
+                style={{ '--i': i } as CSSProperties}
+              >
+                <Rolling>{name}</Rolling>
+              </a>
+            ))}
+          </div>
+          <div className="language-picker" aria-label="Language">
+            <button
+              lang="en"
+              onClick={() => setLanguage('en')}
+              aria-pressed={language === 'en'}
+            >
+              ENG
+            </button>
+            <button
+              lang="am"
+              onClick={() => setLanguage('am')}
+              aria-pressed={language === 'am'}
+            >
+              አማ
+            </button>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
 }
 
-function Navigation({open,setOpen,language,setLanguage}:{open:boolean;setOpen:(o:boolean)=>void;language:Language;setLanguage:(l:Language)=>void}){
- const {t}=useWords();const nav=useRef<HTMLElement>(null);
- useEffect(()=>{if(!open)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';const main=document.getElementById('page-content');if(main)main.inert=true;
-  const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'){setOpen(false);nav.current?.querySelector<HTMLButtonElement>('.menu-toggle')?.focus()}if(e.key==='Tab'){const focusable=nav.current?.querySelectorAll<HTMLElement>('a,button');if(!focusable?.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};
-  document.addEventListener('keydown',onKey);return()=>{document.body.style.overflow=previous;if(main)main.inert=false;document.removeEventListener('keydown',onKey)};
- },[open,setOpen]);
- return <><div className={'menu-shade '+(open?'active':'')} onClick={()=>setOpen(false)} aria-hidden="true"/>
-  <nav className={'capsule '+(open?'expanded':'')} ref={nav} aria-label="Main navigation">
-   <div className="capsule-bar"><button className="menu-toggle" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="navigation-panel"><span className="menu-icon" aria-hidden="true"><i/><i/></span>{t(open?'Close':'Menu')}</button><a className="capsule-brand" href="/invitation" data-local aria-label="Getayawkal and Shalom home"><Mark/></a><a className="capsule-rsvp" href="/rsvp" data-local><Rolling>{'Kindly RSVP'}</Rolling><Arrow/></a></div>
-   <div className="navigation-panel" id="navigation-panel" inert={!open} aria-hidden={!open}><p className="nav-wordmark">Getayawkal<br/><i>&</i> Shalom</p><div className="nav-pages">{navigation.map(([href,name],i)=><a href={href} data-local key={href} style={{'--i':i} as CSSProperties}><Rolling>{name}</Rolling></a>)}</div><div className="language-picker" aria-label="Language"><button lang="en" onClick={()=>setLanguage('en')} aria-pressed={language==='en'}>ENG</button><button lang="am" onClick={()=>setLanguage('am')} aria-pressed={language==='am'}>አማ</button></div></div>
-  </nav></>;
+function Hero({
+  title,
+  subtitle,
+  id,
+  eyebrow,
+  href,
+  action,
+  next = 'chapter',
+}: {
+  title: string;
+  subtitle: string;
+  id: string;
+  eyebrow?: string;
+  href?: string;
+  action?: string;
+  next?: string;
+}) {
+  const { t } = useWords();
+  return (
+    <section className="page-hero" data-parallax>
+      <Photo id={id} priority className="hero-image" />
+      <div className="hero-shade" />
+      <Words as="h1" className="display-title">
+        {title}
+      </Words>
+      <div className="hero-description">
+        {eyebrow && <Label>{eyebrow}</Label>}
+        <p>{t(subtitle)}</p>
+        {href && action && (
+          <Action href={href} fill>
+            {action}
+          </Action>
+        )}
+      </div>
+      <a
+        className="circle-down"
+        href={'#' + next}
+        aria-label={t('Scroll to discover')}
+      >
+        <Arrow down />
+      </a>
+      <p className="hero-index label">G & S / 21.11.2026</p>
+    </section>
+  );
 }
 
-function Hero({title,subtitle,id,eyebrow,href,action,next='chapter'}:{title:string;subtitle:string;id:string;eyebrow?:string;href?:string;action?:string;next?:string}){
- const {t}=useWords();return <section className="page-hero" data-parallax><Photo id={id} priority className="hero-image"/><div className="hero-shade"/><Words as="h1" className="display-title">{title}</Words><div className="hero-description">{eyebrow&&<Label>{eyebrow}</Label>}<p>{t(subtitle)}</p>{href&&action&&<Action href={href} fill>{action}</Action>}</div><a className="circle-down" href={'#'+next} aria-label={t('Scroll to discover')}><Arrow down/></a><p className="hero-index label">G & S / 21.11.2026</p></section>;
+function ScrollChapters() {
+  const { t } = useWords();
+  const chapters = [
+    {
+      label: 'With grateful hearts',
+      title: 'One beautiful promise.',
+      body: 'With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers.',
+      image: 'DSC06257',
+      other: 'DSC05543',
+      href: '/celebration',
+      action: 'Explore the day',
+    },
+    {
+      label: 'A new chapter',
+      title: 'A lifetime, together.',
+      body: 'The quiet moments, the laughter, and every little adventure in between.',
+      image: 'DSC09039',
+      other: 'DSC09102',
+      href: '/moments',
+      action: 'Explore our moments',
+    },
+    {
+      label: 'You are part of our story',
+      title: 'And you, beside us.',
+      body: 'We’ve saved a place for you. Let us know if you can join us.',
+      image: 'DSC09080',
+      other: 'DSC09200',
+      href: '/rsvp',
+      action: 'Kindly RSVP',
+    },
+  ];
+  return (
+    <section className="scroll-chapters" id="chapter" data-scene data-step="0">
+      <div className="chapter-pin">
+        <div className="ambient-grain" />
+        {chapters.map((c, i) => (
+          <article className={'scene-panel scene-' + i} key={c.title}>
+            <div className="chapter-copy">
+              <Label>{c.label}</Label>
+              <h2>{t(c.title)}</h2>
+              <p>{t(c.body)}</p>
+              <Action href={c.href}>{c.action}</Action>
+            </div>
+            <div className="chapter-art">
+              <Photo id={c.other} className="shape-photo shape-small" />
+              <Photo id={c.image} className="shape-photo shape-large" />
+            </div>
+          </article>
+        ))}
+        <div className="chapter-progress" aria-hidden="true">
+          <span />
+          <div>
+            <b>01</b>
+            <b>02</b>
+            <b>03</b>
+          </div>
+        </div>
+        <p className="chapter-side label">Getayawkal & Shalom</p>
+      </div>
+    </section>
+  );
 }
 
-function ScrollChapters(){
- const {t}=useWords();const chapters=[
-  {label:'With grateful hearts',title:'One beautiful promise.',body:'With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers.',image:'DSC06257',other:'DSC05543',href:'/celebration',action:'Explore the day'},
-  {label:'A new chapter',title:'A lifetime, together.',body:'The quiet moments, the laughter, and every little adventure in between.',image:'DSC09039',other:'DSC09102',href:'/moments',action:'Explore our moments'},
-  {label:'You are part of our story',title:'And you, beside us.',body:'We’ve saved a place for you. Let us know if you can join us.',image:'DSC09080',other:'DSC09200',href:'/rsvp',action:'Kindly RSVP'}
- ];
- return <section className="scroll-chapters" id="chapter" data-scene data-step="0"><div className="chapter-pin"><div className="ambient-grain"/>{chapters.map((c,i)=><article className={'scene-panel scene-'+i} key={c.title}><div className="chapter-copy"><Label>{c.label}</Label><h2>{t(c.title)}</h2><p>{t(c.body)}</p><Action href={c.href}>{c.action}</Action></div><div className="chapter-art"><Photo id={c.other} className="shape-photo shape-small"/><Photo id={c.image} className="shape-photo shape-large"/></div></article>)}<div className="chapter-progress" aria-hidden="true"><span/><div><b>01</b><b>02</b><b>03</b></div></div><p className="chapter-side label">Getayawkal & Shalom</p></div></section>;
+function Venue() {
+  const { t } = useWords();
+  return (
+    <section id="venue" className="venue-section">
+      <div className="venue-top">
+        <Label>{'The venue'}</Label>
+        <Words className="section-title">{'A place for our promise.'}</Words>
+      </div>
+      <div className="venue-layout">
+        <div className="venue-copy" data-reveal>
+          <span className="small-index">01 / ADDIS ABABA</span>
+          <h3>{t('Kotabe Full Gospel Church')}</h3>
+          <p>{t('Addis Ababa, Ethiopia')}</p>
+          <div className="ruled-info">
+            <span>{t('Our wedding day')}</span>
+            <span>21 November 2026</span>
+          </div>
+          <div className="ruled-info">
+            <span>{t('The arrival')}</span>
+            <span>1:30 PM EAT · 7:30 Ethiopian</span>
+          </div>
+          <Action href={maps} external>
+            {'Get directions'}
+          </Action>
+        </div>
+        <div className="venue-photo" data-reveal data-parallax>
+          <Photo id="DSC06257" />
+          <div className="venue-photo-label">
+            <span>9° N · ADDIS ABABA</span>
+            <span>THE BEGINNING OF FOREVER</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function Venue(){const {t}=useWords();return <section id="venue" className="venue-section"><div className="venue-top"><Label>{'The venue'}</Label><Words className="section-title">{'A place for our promise.'}</Words></div><div className="venue-layout"><div className="venue-copy" data-reveal><span className="small-index">01 / ADDIS ABABA</span><h3>{t('Kotabe Full Gospel Church')}</h3><p>{t('Addis Ababa, Ethiopia')}</p><div className="ruled-info"><span>{t('Our wedding day')}</span><span>21 November 2026</span></div><div className="ruled-info"><span>{t('The arrival')}</span><span>1:30 PM EAT · 7:30 Ethiopian</span></div><Action href={maps} external>{'Get directions'}</Action></div><div className="venue-photo" data-reveal data-parallax><Photo id="DSC06257"/><div className="venue-photo-label"><span>9° N · ADDIS ABABA</span><span>THE BEGINNING OF FOREVER</span></div></div></div></section>}
-
-function CelebrationPreview(){const {t}=useWords();const [active,setActive]=useState(0);return <section className="split-selector"><div className="selector-copy"><Label>{'The celebration'}</Label><div className="selector-options" role="tablist" aria-label="Wedding schedule">{events.map((e,i)=><button id={'event-tab-'+i} role="tab" aria-selected={active===i} aria-controls="event-preview" key={e.number} onClick={()=>setActive(i)} onKeyDown={e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();setActive((active+1)%3);document.getElementById('event-tab-'+((active+1)%3))?.focus()}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();setActive((active+2)%3);document.getElementById('event-tab-'+((active+2)%3))?.focus()}}}>{t(e.name)}</button>)}</div><div id="event-preview" role="tabpanel" aria-labelledby={'event-tab-'+active} className="selector-info"><h3>{events[active].ethiopian}<small>{t('Ethiopian time')}</small></h3><p>{t(events[active].description)}</p><p className="fine-text">{events[active].eat} EAT (UTC+3)</p><Action href="/celebration">{'Explore the day'}</Action></div></div><div className="selector-images">{events.map((e,i)=><Photo key={e.photo} id={e.photo} className={active===i?'active':''}/>)}<span className="image-counter">{pad(active+1)} / 03</span></div></section>}
-
-function BlueStory(){const {t}=useWords();return <section className="blue-story"><Label>{'A new chapter'}</Label><Words className="blue-title">{'Together, always.'}</Words><div className="blue-photos" data-parallax><Photo id="DSC09204" className="blue-photo-one"/><Photo id="DSC09200" className="blue-photo-two"/></div><div className="blue-copy" data-reveal><h3>{t('Some moments become even more beautiful when shared with the people we love. As we begin our life together, we would be honored to have you beside us.')}</h3><Action href="/our-story">{'About us'}</Action></div></section>}
-
-function GuestDetails(){const {t}=useWords();const [selected,setSelected]=useState(0);const options=[
- {title:'Date & time',copy:'Saturday, November 21, 2026',detail:'Arrival 1:30 PM EAT / 7:30 Ethiopian time. Worship and vows begin at 2:00 PM EAT / 8:00 Ethiopian time.',image:'DSC09039',href:'/celebration',action:'Explore the day'},
- {title:'Your response',copy:'We’ve saved a place for you. Let us know if you can join us.',detail:'Enter your name, phone number, and the number attending, including you.',image:'DSC05543',href:'/rsvp',action:'Kindly RSVP'},
- {title:'From afar',copy:'To our family and friends abroad: share in our ceremony, from wherever you call home.',detail:'Our livestream link will be shared here soon.',image:'DSC06257',href:'/watch',action:'Watch the ceremony'},
- {title:'Your memories',copy:'Capture the joy. Share your photos with us on Telegram.',detail:'Scan the code or tap to share your photos.',image:'DSC09080',href:'/share',action:'Share your memories'}
-];const active=options[selected];return <section id="details" className="guest-details"><div className="section-header"><Label>{'Guest details'}</Label><Words className="section-title">{'Every little detail.'}</Words></div><div className="split-selector"><div className="selector-copy"><div className="selector-options">{options.map((o,i)=><button key={o.title} onClick={()=>setSelected(i)} aria-pressed={selected===i}>{t(o.title)}</button>)}</div><div className="selector-info" aria-live="polite"><p>{t(active.copy)}</p><p className="fine-text">{t(active.detail)}</p><Action href={active.href}>{active.action}</Action></div></div><div className="selector-images">{options.map((o,i)=><Photo id={o.image} key={o.image} className={selected===i?'active':''}/>)}</div></div></section>}
-
-function Countdown(){const {t}=useWords();const [parts,setParts]=useState<number[]|null>(null);useEffect(()=>{const tick=()=>{const n=Math.max(0,Math.floor((Date.parse(date)-Date.now())/1000));setParts([Math.floor(n/86400),Math.floor(n/3600)%24,Math.floor(n/60)%60,n%60])};tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[]);return <div className="countdown" aria-label="Time until the wedding">{['Days','Hours','Minutes','Seconds'].map((unit,i)=><div key={unit}><span>{parts?pad(parts[i]):'—'}</span><small>{t(unit)}</small></div>)}</div>}
-function downloadCalendar(){const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Getayawkal and Shalom//Wedding//EN','BEGIN:VEVENT','UID:getayawkal-shalom-20261121@wedding','DTSTAMP:20261027T000000Z','DTSTART:20261121T103000Z','DTEND:20261121T140000Z','SUMMARY:Getayawkal & Shalom Wedding','LOCATION:Kotabe Full Gospel Church\\, Addis Ababa\\, Ethiopia','DESCRIPTION:Arrival 1:30 PM EAT. Worship and vows 2:00 PM EAT. Photos 4:00 PM EAT.','END:VEVENT','END:VCALENDAR'].join('\r\n');const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));const a=document.createElement('a');a.href=url;a.download='Getayawkal-and-Shalom.ics';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function DateSection(){const {t,language}=useWords();return <section className="date-section"><div className="date-photo" data-expand><Photo id="DSC09004"/><span className="date-overlay">21.11.26</span></div><div className="date-details"><Label>{'Our forever begins'}</Label><Words className="date-heading">{language==='am'?'ህዳር 12':'November 21'}</Words><p className="date-year">{language==='am'?'2019 አ.ም':'2026'} <span>·</span> {t('Addis Ababa, Ethiopia')}</p><Countdown/><button className="action" onClick={downloadCalendar}><Rolling>{'Save to calendar'}</Rolling><Arrow/></button></div></section>}
-
-function HomePage(){const {t,language}=useWords();return <>
- <section className="home-hero home-hero-forest home-hero-portrait"><picture className="home-portrait"><img src="/photos/home-portrait.webp" alt="Getayawkal and Shalom touching foreheads in a black-and-white wedding portrait" width="1800" height="2700" fetchPriority="high" decoding="async"/></picture><div className="hero-shade"/><div className="home-heading"><p className="label">{t('Our forever begins')}</p><h1 aria-label="Getayawkal and Shalom"><span>GETAYAWKAL</span><span><i>&</i> SHALOM</span></h1></div><div className="home-bottom"><p className="label">{language==='am'?'ህዳር 12 2019 አ.ም':'Saturday, November 21, 2026'}<br/>{t('Kotabe Full Gospel Church')}<br/>{t('Addis Ababa, Ethiopia')}</p><a href="#chapter" className="circle-down" aria-label={t('Scroll to discover')}><Arrow down/></a><Action href="/rsvp">{'Kindly RSVP'}</Action></div></section><section className="faith-section home-faith"><Label>{'With grateful hearts'}</Label><blockquote lang="am">እግዚአብሔር ታላቅ ነው እጅግም የተመሰገነ ነው፤<br/>ለታላቅነቱም ፍጻሜ የለውም።</blockquote><p className="label">መዝሙረ ዳዊት 145:3 · Psalm 145:3</p></section>
- <ScrollChapters/><Venue/><section className="full-photo-title" data-parallax><Photo id="DSC09039"/><Words className="section-title">{'The celebration'}</Words><p className="label">SATURDAY / 21 NOVEMBER 2026</p></section><CelebrationPreview/><BlueStory/><GuestDetails/><DateSection/>
- </>}
-
-function CelebrationPage(){const {t}=useWords();const [filter,setFilter]=useState('All');const [time,setTime]=useState('ethiopian');return <>
- <Hero title="The celebration" id="DSC09039" subtitle="With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers." eyebrow="Our wedding day" next="schedule"/>
- <section className="schedule-section" id="schedule"><aside className="schedule-filter"><Label>{'Our wedding day'}</Label><h2>21.11.2026</h2><p>{t('Kotabe Full Gospel Church')}</p><div className="pill-group" aria-label="Filter schedule">{['All','Arrival','Ceremony','Photos'].map(f=><button key={f} onClick={()=>setFilter(f)} aria-pressed={filter===f}>{t(f)}</button>)}</div><Label>{'Date & time'}</Label><div className="time-switch"><button onClick={()=>setTime('ethiopian')} aria-pressed={time==='ethiopian'}>{t('Ethiopian time')}</button><button onClick={()=>setTime('eat')} aria-pressed={time==='eat'}>EAT (UTC+3)</button></div><button className="action" onClick={downloadCalendar}><Rolling>{'Save to calendar'}</Rolling><Arrow/></button></aside><div className="schedule-events" aria-live="polite">{events.filter(e=>filter==='All'||e.category===filter).map(e=><article className="event-card" key={e.number}><div className="event-image"><Photo id={e.photo}/><span>{e.number}</span></div><div className="event-content"><p className="label">{time==='ethiopian'?e.ethiopian+' · '+t('Ethiopian time'):e.eat+' EAT'}</p><h2>{t(e.name)}</h2><p>{t(e.description)}</p><span className="fine-text">{time==='ethiopian'?e.eat+' EAT (UTC+3)':e.ethiopian+' · '+t('Ethiopian time')}</span></div></article>)}</div></section>
- <section className="ceremony-note"><Label>{'With grateful hearts'}</Label><Words>{'A day made more beautiful with you.'}</Words><Action href="/rsvp" fill>{'Kindly RSVP'}</Action></section></>}
-
-function PhotoViewer({index,setIndex,onClose}:{index:number;setIndex:(n:number)=>void;onClose:()=>void}){const dialog=useRef<HTMLDialogElement>(null);const {t}=useWords();useEffect(()=>{dialog.current?.showModal();const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=previous}},[]);const p=photos[index];return <dialog ref={dialog} className="photo-viewer" aria-label="Wedding photo gallery" onCancel={e=>{e.preventDefault();onClose()}} onKeyDown={e=>{if(e.key==='ArrowRight')setIndex((index+1)%photos.length);if(e.key==='ArrowLeft')setIndex((index+photos.length-1)%photos.length)}}><button className="viewer-close" aria-label="Close photo gallery" onClick={onClose}>×</button><Photo id={p.id} priority/><div className="viewer-bottom"><button className="circle" aria-label="Previous photo" onClick={()=>setIndex((index+photos.length-1)%photos.length)}>←</button><p>{t(p.title)}<small>{pad(index+1)} / {pad(photos.length)}</small></p><button className="circle" aria-label="Next photo" onClick={()=>setIndex((index+1)%photos.length)}>→</button></div></dialog>}
-
-function MomentsPage({onPhoto}:{onPhoto:(n:number)=>void}){const {t}=useWords();const [active,setActive]=useState(0);const [grid,setGrid]=useState(false);const [filter,setFilter]=useState('All moments');const startX=useRef<number|null>(null);const swiped=useRef(false);const change=(n:number)=>setActive((n+photos.length)%photos.length);
- return <section className={'moments-page '+(grid?'grid-mode':'')}><div className="moments-heading"><Label>{'Little moments. Endless love.'}</Label><h1>{t('Our moments')}</h1></div><div className="view-switch"><button onClick={()=>setGrid(false)} aria-pressed={!grid}>{t('Experience')}</button><button onClick={()=>setGrid(true)} aria-pressed={grid}>{t('Gallery')}</button></div>
- {!grid?<><div className="photo-stage" tabIndex={0} aria-label="Photo carousel. Use left and right arrows to browse." onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();change(active+1)}if(e.key==='ArrowLeft'){e.preventDefault();change(active-1)}}} onPointerDown={e=>{swiped.current=false;startX.current=e.clientX}} onPointerUp={e=>{if(startX.current!==null&&Math.abs(e.clientX-startX.current)>45){swiped.current=true;change(active+(e.clientX<startX.current?1:-1))}startX.current=null}}>{[-2,-1,0,1,2].map(offset=>{const i=(active+offset+photos.length)%photos.length;return <button key={offset} className={'stage-photo offset-'+(offset+2)} onClick={()=>{if(!swiped.current){offset?change(i):onPhoto(i)}}} aria-label={offset===0?'View photo: '+photos[i].alt:'Browse to '+photos[i].title} tabIndex={offset===0?0:-1}><Photo id={photos[i].id} priority={offset===0}/><span className="stage-expand" aria-hidden="true">↗</span></button>})}</div><div className="moment-caption" aria-live="polite"><span className="label">{pad(active+1)} / {pad(photos.length)}</span><h2>{t(photos[active].title)}</h2><p className="fine-text">{t(photos[active].alt)}</p></div><div className="experience-toolbar"><button aria-label="Previous photo" onClick={()=>change(active-1)}>←</button><div className="photo-dots">{photos.map((p,i)=><button key={p.id} onClick={()=>change(i)} aria-label={'Photo '+(i+1)+': '+p.title} aria-pressed={active===i}>{pad(i+1)}</button>)}</div><button aria-label="Next photo" onClick={()=>change(active+1)}>→</button></div></>:<><div className="gallery-filters pill-group">{['All moments','Together','The promise','Little moments'].map(f=><button key={f} onClick={()=>setFilter(f)} aria-pressed={f===filter}>{t(f)}</button>)}</div><div className="photo-grid">{photos.map((p,i)=>(filter==='All moments'||filter===p.category)&&<button key={p.id} onClick={()=>onPhoto(i)}><div><Photo id={p.id}/><span>↗</span></div><h2>{t(p.title)}</h2><p className="label">{pad(i+1)} / {t(p.category)}</p></button>)}</div></>}
- </section>;
+function CelebrationPreview() {
+  const { t } = useWords();
+  const [active, setActive] = useState(0);
+  return (
+    <section className="split-selector">
+      <div className="selector-copy">
+        <Label>{'The celebration'}</Label>
+        <div
+          className="selector-options"
+          role="tablist"
+          aria-label="Wedding schedule"
+        >
+          {events.map((e, i) => (
+            <button
+              id={'event-tab-' + i}
+              role="tab"
+              aria-selected={active === i}
+              aria-controls="event-preview"
+              key={e.number}
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                  e.preventDefault();
+                  setActive((active + 1) % 3);
+                  document
+                    .getElementById('event-tab-' + ((active + 1) % 3))
+                    ?.focus();
+                }
+                if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                  e.preventDefault();
+                  setActive((active + 2) % 3);
+                  document
+                    .getElementById('event-tab-' + ((active + 2) % 3))
+                    ?.focus();
+                }
+              }}
+            >
+              {t(e.name)}
+            </button>
+          ))}
+        </div>
+        <div
+          id="event-preview"
+          role="tabpanel"
+          aria-labelledby={'event-tab-' + active}
+          className="selector-info"
+        >
+          <h3>
+            {events[active].ethiopian}
+            <small>{t('Ethiopian time')}</small>
+          </h3>
+          <p>{t(events[active].description)}</p>
+          <p className="fine-text">{events[active].eat} EAT (UTC+3)</p>
+          <Action href="/celebration">{'Explore the day'}</Action>
+        </div>
+      </div>
+      <div className="selector-images">
+        {events.map((e, i) => (
+          <Photo
+            key={e.photo}
+            id={e.photo}
+            className={active === i ? 'active' : ''}
+          />
+        ))}
+        <span className="image-counter">{pad(active + 1)} / 03</span>
+      </div>
+    </section>
+  );
 }
 
-function WatchPage(){const {t}=useWords();const [local,setLocal]=useState('');useEffect(()=>{setLocal(new Intl.DateTimeFormat(undefined,{dateStyle:'full',timeStyle:'short'}).format(new Date(date)))},[]);return <><Hero title="Near or far" id="DSC06257" eyebrow="Together in spirit." subtitle="To our family and friends abroad: share in our ceremony, from wherever you call home." next="broadcast"/><section className="broadcast-section" id="broadcast"><div className="broadcast-copy"><Label>{'Watch the ceremony'}</Label><Words>{'A front-row seat, wherever you are.'}</Words><p>{t('November 21, 2026')}<br/>1:30 PM EAT · 7:30 Ethiopian time</p>{local&&<p className="fine-text">{t('In your time zone:')}<br/>{local}</p>}<button className="action" onClick={downloadCalendar}><Rolling>{'Save to calendar'}</Rolling><Arrow/></button></div><div className="broadcast-frame"><Photo id="DSC05543"/><div className="broadcast-status"><span className="broadcast-symbol" aria-hidden="true">▷</span><p className="label">{t('Livestream link coming soon')}</p><p>{t('Return here on our wedding day.')}</p></div></div></section><section className="ceremony-note slate"><Label>{'Across the miles. Together in love.'}</Label><Words>{'Near or far, you’re part of our day.'}</Words><Action href="/rsvp">{'Kindly RSVP'}</Action></section></>}
-
-function SharePage({onPhoto}:{onPhoto:(n:number)=>void}){const {t}=useWords();return <><Hero title="Your memories" id="DSC09080" eyebrow="Through your eyes" subtitle="Capture the joy. Share your photos with us on Telegram." next="share-memories"/><section className="sharing-section" id="share-memories"><div className="sharing-intro"><Label>{'Share your memories'}</Label><Words>{'Our day, through your eyes.'}</Words><p>{t('Capture the joy. Share your photos with us on Telegram.')}</p><Action href={telegram} external fill>{'Join our Telegram group'}</Action></div><div className="sharing-qr"><img src="/telegram-qr.png" width="220" height="220" alt="Scan to join Getayawkal and Shalom’s wedding Telegram group" loading="lazy"/><p className="label">{t('Scan the code or tap to share your photos.')}</p></div></section><div className="sharing-steps">{[['01','Capture','The quiet moments, the laughter, and every little adventure in between.'],['02','Share','Join our Telegram group'],['03','Remember','Our day. Your memories.']].map(([n,title,body])=><article key={n}><span>{n}</span><h2>{t(title)}</h2><p>{t(body)}</p></article>)}</div><section className="sharing-gallery"><Label>{'A few of our favorite memories'}</Label><div>{[3,4,5,6].map(i=><button key={i} onClick={()=>onPhoto(i)} aria-label={'View photo: '+photos[i].alt}><Photo id={photos[i].id}/></button>)}</div></section></>}
-
-function StoryPage(){const {t}=useWords();return <><Hero title="Our beginning" id="DSC05543" eyebrow="Getayawkal & Shalom" subtitle="With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers." href="/rsvp" action="Kindly RSVP"/><section id="chapter" className="story-editorial"><div className="story-heading"><Label>{'With grateful hearts'}</Label><Words>{'Two hearts. One beautiful promise.'}</Words></div><div className="story-editorial-body"><Photo id="DSC06257" className="story-mask"/><div data-reveal><h3>Dr. Getayawkal Kassaye<br/><i>&</i><br/>Dr. Shalom Mekbib</h3><p>{t('Some moments become even more beautiful when shared with the people we love. As we begin our life together, we would be honored to have you beside us.')}</p><p className="label">21 November 2026 · Addis Ababa</p></div></div></section><BlueStory/><section className="faith-section"><Label>{'With grateful hearts'}</Label><blockquote lang="am">እግዚአብሔር ታላቅ ነው እጅግም የተመሰገነ ነው፤<br/>ለታላቅነቱም ፍጻሜ የለውም።</blockquote><p className="label">መዝሙረ ዳዊት 145:3 · Psalm 145:3</p><Action href="/celebration">{'Explore the day'}</Action></section></>}
-
-type Draft={name:string;contact:string;attendance:string;guests:string;side:string;message:string;website:string};
-const initialDraft:Draft={name:'',contact:'',attendance:'yes',guests:'1',side:'',message:'',website:''};
-function RsvpPage({draft,setDraft}:{draft:Draft;setDraft:(d:Draft)=>void}){const {t}=useWords();const [status,setStatus]=useState('');const [busy,setBusy]=useState(false);const [saved,setSaved]=useState(false);const requestId=useRef('');const abort=useRef<AbortController|null>(null);
- useEffect(()=>{try{requestId.current=sessionStorage.getItem('wedding-request-id')||crypto.randomUUID();sessionStorage.setItem('wedding-request-id',requestId.current)}catch{requestId.current=crypto.randomUUID()}return()=>abort.current?.abort()},[]);
- const update=(key:keyof Draft,value:string)=>{setDraft({...draft,[key]:value});if(saved)setSaved(false)};
- async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();if(busy)return;setBusy(true);setStatus('');abort.current=new AbortController();const timeout=setTimeout(()=>abort.current?.abort(),15000);
-  try{const payload={...draft,name:draft.name.trim(),contact:draft.contact.trim(),message:draft.message.trim(),guests:draft.attendance==='yes'?Number(draft.guests):0,requestId:requestId.current};const response=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:abort.current.signal});let result:{error?:string};try{result=await response.json() as {error?:string}}catch{throw new Error('We could not save your response. Please try again.')}if(!response.ok)throw new Error(result.error||'We could not save your response. Please try again.');setSaved(true);setStatus(draft.attendance==='yes'?'Thank you! Your RSVP and wishes have been received. We look forward to celebrating with you.':'Thank you for letting us know. Your response and wishes have been received with love.')}catch(error){setStatus(error instanceof Error&&error.name==='AbortError'?'The connection took too long. Please try again; duplicate responses will not be created.':error instanceof Error?error.message:'We could not save your response. Please try again.')}finally{clearTimeout(timeout);setBusy(false)}
- }
- return <section className="rsvp-page"><div className="rsvp-portrait"><Photo id="DSC06257" priority/><div><Label>{'You are part of our story'}</Label><h1>{t('Join us')}</h1><p>Getayawkal <i>&</i> Shalom<br/><span>21 November 2026</span></p></div></div><div className="rsvp-form-panel"><Label>{'Kindly RSVP'}</Label><h2>{t('We’ve saved a place for you. Let us know if you can join us.')}</h2><form onSubmit={submit} id="rsvp-form"><fieldset className="attendance-pills"><legend>{t('Will you celebrate with us? *')}</legend>{[['yes','Joyfully accept'],['no','Regretfully decline']].map(([value,label])=><label key={value} className={draft.attendance===value?'selected':''}><input type="radio" name="attendance" value={value} checked={draft.attendance===value} onChange={()=>update('attendance',value)} required/><span>{t(label)}</span></label>)}</fieldset><div className="form-pair"><label>{t('Your full name')} *<input name="name" value={draft.name} onChange={e=>update('name',e.target.value)} required minLength={2} maxLength={120} autoComplete="name" placeholder={t('First and last name')}/></label><label>{t('Phone number')} *<input name="contact" value={draft.contact} onChange={e=>update('contact',e.target.value)} required type="tel" pattern="[+0-9\s\(\).\-]{7,30}" minLength={7} maxLength={30} autoComplete="tel" placeholder="+251…"/></label></div><div className="form-pair"><label hidden={draft.attendance!=='yes'}>{t('Number attending, including you')} *<select name="guests" disabled={draft.attendance!=='yes'} value={draft.guests} onChange={e=>update('guests',e.target.value)}>{[1,2,3,4,5,6].map(n=><option key={n} value={n}>{n===1?t('1 guest — just me'):t(n+' guests')}</option>)}</select></label><label>{t('Celebrating with')} *<select name="side" value={draft.side} onChange={e=>update('side',e.target.value)} required><option value="">{t('Choose your side')}</option><option value="groom">{t('Groom’s side')}</option><option value="bride">{t('Bride’s side')}</option><option value="both">{t('Both')}</option></select></label></div><label className="wish-field">{t('A wish, a prayer, a little love')}<textarea name="message" value={draft.message} onChange={e=>update('message',e.target.value)} maxLength={2000} rows={3} placeholder={t('Leave your wishes for the couple…')}/></label><label className="honeypot" aria-hidden="true">Leave empty<input name="website" tabIndex={-1} autoComplete="off" value={draft.website} onChange={e=>update('website',e.target.value)}/></label><div className="form-submit"><button className="action filled" type="submit" disabled={busy}><Rolling>{busy?'Sending…':saved?'Update response':'Send response'}</Rolling><Arrow/></button><p>{t('Your response and wishes are shared privately with the couple.')} <a href="/privacy" data-local>{t('Your privacy')}</a></p></div><div className={'form-status '+(saved?'success':'')} role="status" aria-live="polite">{saved&&<h3>{t('Response received')}</h3>}{t(status)}</div></form></div></section>;
+function BlueStory() {
+  const { t } = useWords();
+  return (
+    <section className="blue-story">
+      <Label>{'A new chapter'}</Label>
+      <Words className="blue-title">{'Together, always.'}</Words>
+      <div className="blue-photos" data-parallax>
+        <Photo id="DSC09204" className="blue-photo-one" />
+        <Photo id="DSC09200" className="blue-photo-two" />
+      </div>
+      <div className="blue-copy" data-reveal>
+        <h3>
+          {t(
+            'Some moments become even more beautiful when shared with the people we love. As we begin our life together, we would be honored to have you beside us.',
+          )}
+        </h3>
+        <Action href="/our-story">{'About us'}</Action>
+      </div>
+    </section>
+  );
 }
 
-function PrivacyPage(){return <><Hero title="Your privacy" id="DSC09204" subtitle="A few words about your wedding response." next="privacy-details"/><article className="privacy-copy" id="privacy-details"><h2>Your wedding response</h2><p>The RSVP form saves your name, phone number, attendance choice, party size, which side you are celebrating with, and any message you choose to leave. These details are for Getayawkal and Shalom to plan their wedding.</p><h2>Saving and updating</h2><p>Responses are stored in the website’s database. A response identifier in your browser session lets you update your response from the same tab without creating a duplicate. Your language choice and whether you have opened the invitation are also remembered on this device. If you need a saved response corrected or removed, contact the couple directly.</p><h2>Photos and other websites</h2><p>The photos shown here were supplied by the couple. Google Maps, calendar links, and the Telegram group open external services with their own privacy settings. Photos you share in the Telegram group are visible according to that group’s settings.</p><Action href="/rsvp">{'Kindly RSVP'}</Action></article></>}
+function GuestDetails() {
+  const { t } = useWords();
+  const [selected, setSelected] = useState(0);
+  const options = [
+    {
+      title: 'Date & time',
+      copy: 'Saturday, November 21, 2026',
+      detail:
+        'Arrival 1:30 PM EAT / 7:30 Ethiopian time. Worship and vows begin at 2:00 PM EAT / 8:00 Ethiopian time.',
+      image: 'DSC09039',
+      href: '/celebration',
+      action: 'Explore the day',
+    },
+    {
+      title: 'Your response',
+      copy: 'We’ve saved a place for you. Let us know if you can join us.',
+      detail:
+        'Enter your name, phone number, and the number attending, including you.',
+      image: 'DSC05543',
+      href: '/rsvp',
+      action: 'Kindly RSVP',
+    },
+    {
+      title: 'From afar',
+      copy: 'To our family and friends abroad: share in our ceremony, from wherever you call home.',
+      detail: 'Our livestream link will be shared here soon.',
+      image: 'DSC06257',
+      href: '/watch',
+      action: 'Watch the ceremony',
+    },
+    {
+      title: 'Your memories',
+      copy: 'Capture the joy. Share your photos with us on Telegram.',
+      detail: 'Scan the code or tap to share your photos.',
+      image: 'DSC09080',
+      href: '/share',
+      action: 'Share your memories',
+    },
+  ];
+  const active = options[selected];
+  return (
+    <section id="details" className="guest-details">
+      <div className="section-header">
+        <Label>{'Guest details'}</Label>
+        <Words className="section-title">{'Every little detail.'}</Words>
+      </div>
+      <div className="split-selector">
+        <div className="selector-copy">
+          <div className="selector-options">
+            {options.map((o, i) => (
+              <button
+                key={o.title}
+                onClick={() => setSelected(i)}
+                aria-pressed={selected === i}
+              >
+                {t(o.title)}
+              </button>
+            ))}
+          </div>
+          <div className="selector-info" aria-live="polite">
+            <p>{t(active.copy)}</p>
+            <p className="fine-text">{t(active.detail)}</p>
+            <Action href={active.href}>{active.action}</Action>
+          </div>
+        </div>
+        <div className="selector-images">
+          {options.map((o, i) => (
+            <Photo
+              id={o.image}
+              key={o.image}
+              className={selected === i ? 'active' : ''}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-function Footer({onReplay}:{onReplay:()=>void}){const {t}=useWords();return <footer className="site-footer"><Photo id="DSC09004" className="footer-photo"/><div className="footer-wash"/><div className="footer-top"><div><Label>{'With love, always.'}</Label><h2>{t("We can't wait to celebrate with you.")}</h2><Action href="/rsvp">{'Kindly RSVP'}</Action></div><div className="footer-links">{navigation.filter((_,i)=>[0,1,2,3,4,8].includes(i)).map(([href,label])=><a href={href} data-local key={href}>{t(label)}</a>)}</div><div className="footer-small"><p>21 November 2026<br/>{t('Kotabe Full Gospel Church')}<br/>{t('Addis Ababa, Ethiopia')}</p><button onClick={onReplay}>{t('Replay invitation')} ↗</button><a href="/privacy" data-local>{t('Your privacy')}</a></div></div><div className="footer-bottom"><p className="label">{t('With love, always.')} / 2026</p><span>GETAYAWKAL <i>&</i> SHALOM</span></div></footer>}
+function Countdown() {
+  const { t } = useWords();
+  const [parts, setParts] = useState<number[] | null>(null);
+  useEffect(() => {
+    const tick = () => {
+      const n = Math.max(0, Math.floor((Date.parse(date) - Date.now()) / 1000));
+      setParts([
+        Math.floor(n / 86400),
+        Math.floor(n / 3600) % 24,
+        Math.floor(n / 60) % 60,
+        n % 60,
+      ]);
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div className="countdown" aria-label="Time until the wedding">
+      {['Days', 'Hours', 'Minutes', 'Seconds'].map((unit, i) => (
+        <div key={unit}>
+          <span>{parts ? pad(parts[i]) : '—'}</span>
+          <small>{t(unit)}</small>
+        </div>
+      ))}
+    </div>
+  );
+}
+function downloadCalendar() {
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Getayawkal and Shalom//Wedding//EN',
+    'BEGIN:VEVENT',
+    'UID:getayawkal-shalom-20261121@wedding',
+    'DTSTAMP:20261027T000000Z',
+    'DTSTART:20261121T103000Z',
+    'DTEND:20261121T140000Z',
+    'SUMMARY:Getayawkal & Shalom Wedding',
+    'LOCATION:Kotabe Full Gospel Church\\, Addis Ababa\\, Ethiopia',
+    'DESCRIPTION:Arrival 1:30 PM EAT. Worship and vows 2:00 PM EAT. Photos 4:00 PM EAT.',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Getayawkal-and-Shalom.ics';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function DateSection() {
+  const { t, language } = useWords();
+  return (
+    <section className="date-section">
+      <div className="date-photo" data-expand>
+        <Photo id="DSC09004" />
+        <span className="date-overlay">21.11.26</span>
+      </div>
+      <div className="date-details">
+        <Label>{'Our forever begins'}</Label>
+        <Words className="date-heading">
+          {language === 'am' ? 'ህዳር 12' : 'November 21'}
+        </Words>
+        <p className="date-year">
+          {language === 'am' ? '2019 አ.ም' : '2026'} <span>·</span>{' '}
+          {t('Addis Ababa, Ethiopia')}
+        </p>
+        <Countdown />
+        <button className="action" onClick={downloadCalendar}>
+          <Rolling>{'Save to calendar'}</Rolling>
+          <Arrow />
+        </button>
+      </div>
+    </section>
+  );
+}
 
-export default function WeddingSite({initialPage}:{initialPage:string}){
- const [page,setPage]=useState(initialPage);const [language,setLanguage]=useState<Language>('en');const [menuOpen,setMenuOpen]=useState(false);const [intro,setIntro]=useState(true);const [transition,setTransition]=useState(false);const [viewer,setViewer]=useState<number|null>(null);const [sound,setSound]=useState(false);const [soundError,setSoundError]=useState(false);const [draft,setDraft]=useState(initialDraft);const audio=useRef<HTMLAudioElement|null>(null);const routeTimer=useRef<ReturnType<typeof setTimeout>|null>(null);const lastPhotoFocus=useRef<HTMLElement|null>(null);
- const t=(text:string)=>language==='am'?(extraAm[text]||(previousTranslations as Record<string,string>)[text]||text):text;
- useMotion(page,language);
- useEffect(()=>{try{const lang=localStorage.getItem('gs-language');if(lang==='am'||lang==='en')setLanguage(lang)}catch{}const pop=()=>{setPage(location.pathname.split('/').filter(Boolean)[0]||'invitation');setMenuOpen(false);setViewer(null)};addEventListener('popstate',pop);return()=>{removeEventListener('popstate',pop);if(routeTimer.current)clearTimeout(routeTimer.current);audio.current?.pause()}},[initialPage]);
- useEffect(()=>{document.documentElement.lang=language;try{localStorage.setItem('gs-language',language)}catch{}},[language]);
- useEffect(()=>{document.title=(pageNames[page]||'Our wedding')+' — Getayawkal & Shalom';},[page]);
- function go(href:string){const url=new URL(href,location.origin);const next=url.pathname.split('/').filter(Boolean)[0]||'invitation';if(!(next in pageNames))return;setMenuOpen(false);if(routeTimer.current)clearTimeout(routeTimer.current);if(page===next){history.pushState({},'',url.pathname+url.hash);if(url.hash)document.getElementById(url.hash.slice(1))?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});else window.scrollTo({top:0,behavior:'smooth'});return}setTransition(true);routeTimer.current=setTimeout(()=>{setPage(next);history.pushState({},'',url.pathname+url.hash);window.scrollTo({top:0,behavior:'instant'});setTransition(false);requestAnimationFrame(()=>{if(url.hash)document.getElementById(url.hash.slice(1))?.scrollIntoView({behavior:'instant'});document.getElementById('page-content')?.focus({preventScroll:true})})},matchMedia('(prefers-reduced-motion: reduce)').matches?0:360)}
- async function toggleSound(){if(!audio.current){audio.current=new Audio('/wedding-song.mp3');audio.current.loop=true;audio.current.volume=.35}try{if(audio.current.paused){await audio.current.play();setSound(true)}else{audio.current.pause();setSound(false)}setSoundError(false)}catch{setSoundError(true);setSound(false)}}
- function enter(){setPage('invitation');history.replaceState({},'','/invitation');window.scrollTo({top:0,behavior:'instant'});setIntro(false);document.getElementById('page-content')?.focus({preventScroll:true})}
- function replay(){if(page!=='invitation')go('/invitation');setMenuOpen(false);setIntro(true)}
- function openPhoto(n:number){lastPhotoFocus.current=document.activeElement as HTMLElement;setViewer(n)}
- return <LanguageContext.Provider value={{language,t}}><div className="wedding-app" onClick={e=>{const a=(e.target as Element).closest<HTMLAnchorElement>('a[data-local]');if(a&&!e.defaultPrevented&&e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();go(a.getAttribute('href')!)}}}><a className="skip-link" href="#page-content">Skip to content</a><Navigation open={menuOpen} setOpen={setMenuOpen} language={language} setLanguage={setLanguage}/><div className={'page-curtain '+(transition?'cover':'')} aria-hidden="true"><Mark/></div><div id="page-content" tabIndex={-1} className="page-content" key={page}><main>{page==='invitation'?<HomePage/>:page==='celebration'?<CelebrationPage/>:page==='moments'?<MomentsPage onPhoto={openPhoto}/>:page==='watch'?<WatchPage/>:page==='share'?<SharePage onPhoto={openPhoto}/>:page==='our-story'?<StoryPage/>:page==='rsvp'?<RsvpPage draft={draft} setDraft={setDraft}/>:<PrivacyPage/>}</main>{page!=='rsvp'&&page!=='moments'&&<Footer onReplay={replay}/>}</div><button className={'sound-control '+(sound?'playing':'')} onClick={toggleSound} aria-pressed={sound} aria-label={sound?'Pause music':'Play music'}><span className="sound-bars" aria-hidden="true"><i/><i/><i/></span>{t(soundError?'Tap to retry music':sound?'Sound on':'Sound off')}</button><Envelope open={intro} onEnter={enter} onStart={()=>{if(!sound)void toggleSound()}}/>{viewer!==null&&<PhotoViewer index={viewer} setIndex={setViewer} onClose={()=>{setViewer(null);lastPhotoFocus.current?.focus()}}/>}</div></LanguageContext.Provider>;
+function HomePage() {
+  const { t, language } = useWords();
+  return (
+    <>
+      <section className="home-hero home-hero-forest home-hero-portrait">
+        <picture className="home-portrait">
+          <img
+            src="/photos/home-portrait.webp"
+            alt="Getayawkal and Shalom touching foreheads in a black-and-white wedding portrait"
+            width="1800"
+            height="2700"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
+        <div className="hero-shade" />
+        <div className="home-heading">
+          <p className="label">{t('Our forever begins')}</p>
+          <h1 aria-label="Getayawkal and Shalom">
+            <span>GETAYAWKAL</span>
+            <span>
+              <i>&</i> SHALOM
+            </span>
+          </h1>
+        </div>
+        <div className="home-bottom">
+          <p className="label">
+            {language === 'am'
+              ? 'ህዳር 12 2019 አ.ም'
+              : 'Saturday, November 21, 2026'}
+            <br />
+            {t('Kotabe Full Gospel Church')}
+            <br />
+            {t('Addis Ababa, Ethiopia')}
+          </p>
+          <a
+            href="#chapter"
+            className="circle-down"
+            aria-label={t('Scroll to discover')}
+          >
+            <Arrow down />
+          </a>
+          <Action href="/rsvp">{'Kindly RSVP'}</Action>
+        </div>
+      </section>
+      <section className="faith-section home-faith">
+        <Label>{'With grateful hearts'}</Label>
+        <blockquote lang="am">
+          እግዚአብሔር ታላቅ ነው እጅግም የተመሰገነ ነው፤
+          <br />
+          ለታላቅነቱም ፍጻሜ የለውም።
+        </blockquote>
+        <p className="label">መዝሙረ ዳዊት 145:3 · Psalm 145:3</p>
+      </section>
+      <ScrollChapters />
+      <Venue />
+      <section className="full-photo-title" data-parallax>
+        <Photo id="DSC09039" />
+        <Words className="section-title">{'The celebration'}</Words>
+        <p className="label">SATURDAY / 21 NOVEMBER 2026</p>
+      </section>
+      <CelebrationPreview />
+      <BlueStory />
+      <GuestDetails />
+      <DateSection />
+    </>
+  );
+}
+
+function CelebrationPage() {
+  const { t } = useWords();
+  const [filter, setFilter] = useState('All');
+  const [time, setTime] = useState('ethiopian');
+  return (
+    <>
+      <Hero
+        title="The celebration"
+        id="DSC09039"
+        subtitle="With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers."
+        eyebrow="Our wedding day"
+        next="schedule"
+      />
+      <section className="schedule-section" id="schedule">
+        <aside className="schedule-filter">
+          <Label>{'Our wedding day'}</Label>
+          <h2>21.11.2026</h2>
+          <p>{t('Kotabe Full Gospel Church')}</p>
+          <div className="pill-group" aria-label="Filter schedule">
+            {['All', 'Arrival', 'Ceremony', 'Photos'].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                aria-pressed={filter === f}
+              >
+                {t(f)}
+              </button>
+            ))}
+          </div>
+          <Label>{'Date & time'}</Label>
+          <div className="time-switch">
+            <button
+              onClick={() => setTime('ethiopian')}
+              aria-pressed={time === 'ethiopian'}
+            >
+              {t('Ethiopian time')}
+            </button>
+            <button
+              onClick={() => setTime('eat')}
+              aria-pressed={time === 'eat'}
+            >
+              EAT (UTC+3)
+            </button>
+          </div>
+          <button className="action" onClick={downloadCalendar}>
+            <Rolling>{'Save to calendar'}</Rolling>
+            <Arrow />
+          </button>
+        </aside>
+        <div className="schedule-events" aria-live="polite">
+          {events
+            .filter((e) => filter === 'All' || e.category === filter)
+            .map((e) => (
+              <article className="event-card" key={e.number}>
+                <div className="event-image">
+                  <Photo id={e.photo} />
+                  <span>{e.number}</span>
+                </div>
+                <div className="event-content">
+                  <p className="label">
+                    {time === 'ethiopian'
+                      ? e.ethiopian + ' · ' + t('Ethiopian time')
+                      : e.eat + ' EAT'}
+                  </p>
+                  <h2>{t(e.name)}</h2>
+                  <p>{t(e.description)}</p>
+                  <span className="fine-text">
+                    {time === 'ethiopian'
+                      ? e.eat + ' EAT (UTC+3)'
+                      : e.ethiopian + ' · ' + t('Ethiopian time')}
+                  </span>
+                </div>
+              </article>
+            ))}
+        </div>
+      </section>
+      <section className="ceremony-note">
+        <Label>{'With grateful hearts'}</Label>
+        <Words>{'A day made more beautiful with you.'}</Words>
+        <Action href="/rsvp" fill>
+          {'Kindly RSVP'}
+        </Action>
+      </section>
+    </>
+  );
+}
+
+function PhotoViewer({
+  index,
+  setIndex,
+  onClose,
+}: {
+  index: number;
+  setIndex: (n: number) => void;
+  onClose: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const { t } = useWords();
+  useEffect(() => {
+    dialog.current?.showModal();
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+  const p = photos[index];
+  return (
+    <dialog
+      ref={dialog}
+      className="photo-viewer"
+      aria-label="Wedding photo gallery"
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowRight') setIndex((index + 1) % photos.length);
+        if (e.key === 'ArrowLeft')
+          setIndex((index + photos.length - 1) % photos.length);
+      }}
+    >
+      <button
+        className="viewer-close"
+        aria-label="Close photo gallery"
+        onClick={onClose}
+      >
+        ×
+      </button>
+      <Photo id={p.id} priority />
+      <div className="viewer-bottom">
+        <button
+          className="circle"
+          aria-label="Previous photo"
+          onClick={() => setIndex((index + photos.length - 1) % photos.length)}
+        >
+          ←
+        </button>
+        <p>
+          {t(p.title)}
+          <small>
+            {pad(index + 1)} / {pad(photos.length)}
+          </small>
+        </p>
+        <button
+          className="circle"
+          aria-label="Next photo"
+          onClick={() => setIndex((index + 1) % photos.length)}
+        >
+          →
+        </button>
+      </div>
+    </dialog>
+  );
+}
+
+function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
+  const { t } = useWords();
+  const [active, setActive] = useState(0);
+  const [grid, setGrid] = useState(false);
+  const [filter, setFilter] = useState('All moments');
+  const startX = useRef<number | null>(null);
+  const swiped = useRef(false);
+  const change = (n: number) => setActive((n + photos.length) % photos.length);
+  return (
+    <section className={'moments-page ' + (grid ? 'grid-mode' : '')}>
+      <div className="moments-heading">
+        <Label>{'Little moments. Endless love.'}</Label>
+        <h1>{t('Our moments')}</h1>
+      </div>
+      <div className="view-switch">
+        <button onClick={() => setGrid(false)} aria-pressed={!grid}>
+          {t('Experience')}
+        </button>
+        <button onClick={() => setGrid(true)} aria-pressed={grid}>
+          {t('Gallery')}
+        </button>
+      </div>
+      {!grid ? (
+        <>
+          <div
+            className="photo-stage"
+            tabIndex={0}
+            aria-label="Photo carousel. Use left and right arrows to browse."
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                change(active + 1);
+              }
+              if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                change(active - 1);
+              }
+            }}
+            onPointerDown={(e) => {
+              swiped.current = false;
+              startX.current = e.clientX;
+            }}
+            onPointerUp={(e) => {
+              if (
+                startX.current !== null &&
+                Math.abs(e.clientX - startX.current) > 45
+              ) {
+                swiped.current = true;
+                change(active + (e.clientX < startX.current ? 1 : -1));
+              }
+              startX.current = null;
+            }}
+          >
+            {[-2, -1, 0, 1, 2].map((offset) => {
+              const i = (active + offset + photos.length) % photos.length;
+              return (
+                <button
+                  key={offset}
+                  className={'stage-photo offset-' + (offset + 2)}
+                  onClick={() => {
+                    if (!swiped.current) {
+                      offset ? change(i) : onPhoto(i);
+                    }
+                  }}
+                  aria-label={
+                    offset === 0
+                      ? 'View photo: ' + photos[i].alt
+                      : 'Browse to ' + photos[i].title
+                  }
+                  tabIndex={offset === 0 ? 0 : -1}
+                >
+                  <Photo id={photos[i].id} priority={offset === 0} />
+                  <span className="stage-expand" aria-hidden="true">
+                    ↗
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="moment-caption" aria-live="polite">
+            <span className="label">
+              {pad(active + 1)} / {pad(photos.length)}
+            </span>
+            <h2>{t(photos[active].title)}</h2>
+            <p className="fine-text">{t(photos[active].alt)}</p>
+          </div>
+          <div className="experience-toolbar">
+            <button
+              aria-label="Previous photo"
+              onClick={() => change(active - 1)}
+            >
+              ←
+            </button>
+            <div className="photo-dots">
+              {photos.map((p, i) => (
+                <button
+                  key={p.id}
+                  onClick={() => change(i)}
+                  aria-label={'Photo ' + (i + 1) + ': ' + p.title}
+                  aria-pressed={active === i}
+                >
+                  {pad(i + 1)}
+                </button>
+              ))}
+            </div>
+            <button aria-label="Next photo" onClick={() => change(active + 1)}>
+              →
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="gallery-filters pill-group">
+            {['All moments', 'Together', 'The promise', 'Little moments'].map(
+              (f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  aria-pressed={f === filter}
+                >
+                  {t(f)}
+                </button>
+              ),
+            )}
+          </div>
+          <div className="photo-grid">
+            {photos.map(
+              (p, i) =>
+                (filter === 'All moments' || filter === p.category) && (
+                  <button key={p.id} onClick={() => onPhoto(i)}>
+                    <div>
+                      <Photo id={p.id} />
+                      <span>↗</span>
+                    </div>
+                    <h2>{t(p.title)}</h2>
+                    <p className="label">
+                      {pad(i + 1)} / {t(p.category)}
+                    </p>
+                  </button>
+                ),
+            )}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+function WatchPage() {
+  const { t } = useWords();
+  const [local, setLocal] = useState('');
+  useEffect(() => {
+    setLocal(
+      new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'full',
+        timeStyle: 'short',
+      }).format(new Date(date)),
+    );
+  }, []);
+  return (
+    <>
+      <Hero
+        title="Near or far"
+        id="DSC06257"
+        eyebrow="Together in spirit."
+        subtitle="To our family and friends abroad: share in our ceremony, from wherever you call home."
+        next="broadcast"
+      />
+      <section className="broadcast-section" id="broadcast">
+        <div className="broadcast-copy">
+          <Label>{'Watch the ceremony'}</Label>
+          <Words>{'A front-row seat, wherever you are.'}</Words>
+          <p>
+            {t('November 21, 2026')}
+            <br />
+            1:30 PM EAT · 7:30 Ethiopian time
+          </p>
+          {local && (
+            <p className="fine-text">
+              {t('In your time zone:')}
+              <br />
+              {local}
+            </p>
+          )}
+          <button className="action" onClick={downloadCalendar}>
+            <Rolling>{'Save to calendar'}</Rolling>
+            <Arrow />
+          </button>
+        </div>
+        <div className="broadcast-frame">
+          <Photo id="DSC05543" />
+          <div className="broadcast-status">
+            <span className="broadcast-symbol" aria-hidden="true">
+              ▷
+            </span>
+            <p className="label">{t('Livestream link coming soon')}</p>
+            <p>{t('Return here on our wedding day.')}</p>
+          </div>
+        </div>
+      </section>
+      <section className="ceremony-note slate">
+        <Label>{'Across the miles. Together in love.'}</Label>
+        <Words>{'Near or far, you’re part of our day.'}</Words>
+        <Action href="/rsvp">{'Kindly RSVP'}</Action>
+      </section>
+    </>
+  );
+}
+
+function SharePage({ onPhoto }: { onPhoto: (n: number) => void }) {
+  const { t } = useWords();
+  return (
+    <>
+      <Hero
+        title="Your memories"
+        id="DSC09080"
+        eyebrow="Through your eyes"
+        subtitle="Capture the joy. Share your photos with us on Telegram."
+        next="share-memories"
+      />
+      <section className="sharing-section" id="share-memories">
+        <div className="sharing-intro">
+          <Label>{'Share your memories'}</Label>
+          <Words>{'Our day, through your eyes.'}</Words>
+          <p>{t('Capture the joy. Share your photos with us on Telegram.')}</p>
+          <Action href={telegram} external fill>
+            {'Join our Telegram group'}
+          </Action>
+        </div>
+        <div className="sharing-qr">
+          <img
+            src="/telegram-qr.png"
+            width="220"
+            height="220"
+            alt="Scan to join Getayawkal and Shalom’s wedding Telegram group"
+            loading="lazy"
+          />
+          <p className="label">
+            {t('Scan the code or tap to share your photos.')}
+          </p>
+        </div>
+      </section>
+      <div className="sharing-steps">
+        {[
+          [
+            '01',
+            'Capture',
+            'The quiet moments, the laughter, and every little adventure in between.',
+          ],
+          ['02', 'Share', 'Join our Telegram group'],
+          ['03', 'Remember', 'Our day. Your memories.'],
+        ].map(([n, title, body]) => (
+          <article key={n}>
+            <span>{n}</span>
+            <h2>{t(title)}</h2>
+            <p>{t(body)}</p>
+          </article>
+        ))}
+      </div>
+      <section className="sharing-gallery">
+        <Label>{'A few of our favorite memories'}</Label>
+        <div>
+          {[3, 4, 5, 6].map((i) => (
+            <button
+              key={i}
+              onClick={() => onPhoto(i)}
+              aria-label={'View photo: ' + photos[i].alt}
+            >
+              <Photo id={photos[i].id} />
+            </button>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function StoryPage() {
+  const { t } = useWords();
+  return (
+    <>
+      <Hero
+        title="Our beginning"
+        id="DSC05543"
+        eyebrow="Getayawkal & Shalom"
+        subtitle="With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers."
+        href="/rsvp"
+        action="Kindly RSVP"
+      />
+      <section id="chapter" className="story-editorial">
+        <div className="story-heading">
+          <Label>{'With grateful hearts'}</Label>
+          <Words>{'Two hearts. One beautiful promise.'}</Words>
+        </div>
+        <div className="story-editorial-body">
+          <Photo id="DSC06257" className="story-mask" />
+          <div data-reveal>
+            <h3>
+              Dr. Getayawkal Kassaye
+              <br />
+              <i>&</i>
+              <br />
+              Dr. Shalom Mekbib
+            </h3>
+            <p>
+              {t(
+                'Some moments become even more beautiful when shared with the people we love. As we begin our life together, we would be honored to have you beside us.',
+              )}
+            </p>
+            <p className="label">21 November 2026 · Addis Ababa</p>
+          </div>
+        </div>
+      </section>
+      <BlueStory />
+      <section className="faith-section">
+        <Label>{'With grateful hearts'}</Label>
+        <blockquote lang="am">
+          እግዚአብሔር ታላቅ ነው እጅግም የተመሰገነ ነው፤
+          <br />
+          ለታላቅነቱም ፍጻሜ የለውም።
+        </blockquote>
+        <p className="label">መዝሙረ ዳዊት 145:3 · Psalm 145:3</p>
+        <Action href="/celebration">{'Explore the day'}</Action>
+      </section>
+    </>
+  );
+}
+
+type Draft = {
+  name: string;
+  contact: string;
+  attendance: string;
+  guests: string;
+  side: string;
+  message: string;
+  website: string;
+};
+const initialDraft: Draft = {
+  name: '',
+  contact: '',
+  attendance: 'yes',
+  guests: '1',
+  side: '',
+  message: '',
+  website: '',
+};
+function RsvpPage({
+  draft,
+  setDraft,
+}: {
+  draft: Draft;
+  setDraft: (d: Draft) => void;
+}) {
+  const { t } = useWords();
+  const [status, setStatus] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const requestId = useRef('');
+  const abort = useRef<AbortController | null>(null);
+  useEffect(() => {
+    try {
+      requestId.current =
+        sessionStorage.getItem('wedding-request-id') || crypto.randomUUID();
+      sessionStorage.setItem('wedding-request-id', requestId.current);
+    } catch {
+      requestId.current = crypto.randomUUID();
+    }
+    return () => abort.current?.abort();
+  }, []);
+  const update = (key: keyof Draft, value: string) => {
+    setDraft({ ...draft, [key]: value });
+    if (saved) setSaved(false);
+  };
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    setStatus('');
+    abort.current = new AbortController();
+    const timeout = setTimeout(() => abort.current?.abort(), 15000);
+    try {
+      const payload = {
+        ...draft,
+        name: draft.name.trim(),
+        contact: draft.contact.trim(),
+        message: draft.message.trim(),
+        guests: draft.attendance === 'yes' ? Number(draft.guests) : 0,
+        requestId: requestId.current,
+      };
+      const response = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: abort.current.signal,
+      });
+      let result: { error?: string };
+      try {
+        result = (await response.json()) as { error?: string };
+      } catch {
+        throw new Error('We could not save your response. Please try again.');
+      }
+      if (!response.ok)
+        throw new Error(
+          result.error || 'We could not save your response. Please try again.',
+        );
+      setSaved(true);
+      setStatus(
+        draft.attendance === 'yes'
+          ? 'Thank you! Your RSVP and wishes have been received. We look forward to celebrating with you.'
+          : 'Thank you for letting us know. Your response and wishes have been received with love.',
+      );
+    } catch (error) {
+      setStatus(
+        error instanceof Error && error.name === 'AbortError'
+          ? 'The connection took too long. Please try again; duplicate responses will not be created.'
+          : error instanceof Error
+            ? error.message
+            : 'We could not save your response. Please try again.',
+      );
+    } finally {
+      clearTimeout(timeout);
+      setBusy(false);
+    }
+  }
+  return (
+    <section className="rsvp-page">
+      <div className="rsvp-portrait">
+        <Photo id="DSC06257" priority />
+        <div>
+          <Label>{'You are part of our story'}</Label>
+          <h1>{t('Join us')}</h1>
+          <p>
+            Getayawkal <i>&</i> Shalom
+            <br />
+            <span>21 November 2026</span>
+          </p>
+        </div>
+      </div>
+      <div className="rsvp-form-panel">
+        <Label>{'Kindly RSVP'}</Label>
+        <h2>
+          {t('We’ve saved a place for you. Let us know if you can join us.')}
+        </h2>
+        <form onSubmit={submit} id="rsvp-form">
+          <fieldset className="attendance-pills">
+            <legend>{t('Will you celebrate with us? *')}</legend>
+            {[
+              ['yes', 'Joyfully accept'],
+              ['no', 'Regretfully decline'],
+            ].map(([value, label]) => (
+              <label
+                key={value}
+                className={draft.attendance === value ? 'selected' : ''}
+              >
+                <input
+                  type="radio"
+                  name="attendance"
+                  value={value}
+                  checked={draft.attendance === value}
+                  onChange={() => update('attendance', value)}
+                  required
+                />
+                <span>{t(label)}</span>
+              </label>
+            ))}
+          </fieldset>
+          <div className="form-pair">
+            <label>
+              {t('Your full name')} *
+              <input
+                name="name"
+                value={draft.name}
+                onChange={(e) => update('name', e.target.value)}
+                required
+                minLength={2}
+                maxLength={120}
+                autoComplete="name"
+                placeholder={t('First and last name')}
+              />
+            </label>
+            <label>
+              {t('Phone number')} *
+              <input
+                name="contact"
+                value={draft.contact}
+                onChange={(e) => update('contact', e.target.value)}
+                required
+                type="tel"
+                pattern="[+0-9\s\(\).\-]{7,30}"
+                minLength={7}
+                maxLength={30}
+                autoComplete="tel"
+                placeholder="+251…"
+              />
+            </label>
+          </div>
+          <div className="form-pair">
+            <label hidden={draft.attendance !== 'yes'}>
+              {t('Number attending, including you')} *
+              <select
+                name="guests"
+                disabled={draft.attendance !== 'yes'}
+                value={draft.guests}
+                onChange={(e) => update('guests', e.target.value)}
+              >
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <option key={n} value={n}>
+                    {n === 1 ? t('1 guest — just me') : t(n + ' guests')}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {t('Celebrating with')} *
+              <select
+                name="side"
+                value={draft.side}
+                onChange={(e) => update('side', e.target.value)}
+                required
+              >
+                <option value="">{t('Choose your side')}</option>
+                <option value="groom">{t('Groom’s side')}</option>
+                <option value="bride">{t('Bride’s side')}</option>
+                <option value="both">{t('Both')}</option>
+              </select>
+            </label>
+          </div>
+          <label className="wish-field">
+            {t('A wish, a prayer, a little love')}
+            <textarea
+              name="message"
+              value={draft.message}
+              onChange={(e) => update('message', e.target.value)}
+              maxLength={2000}
+              rows={3}
+              placeholder={t('Leave your wishes for the couple…')}
+            />
+          </label>
+          <label className="honeypot" aria-hidden="true">
+            Leave empty
+            <input
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={draft.website}
+              onChange={(e) => update('website', e.target.value)}
+            />
+          </label>
+          <div className="form-submit">
+            <button className="action filled" type="submit" disabled={busy}>
+              <Rolling>
+                {busy
+                  ? 'Sending…'
+                  : saved
+                    ? 'Update response'
+                    : 'Send response'}
+              </Rolling>
+              <Arrow />
+            </button>
+            <p>
+              {t(
+                'Your response and wishes are shared privately with the couple.',
+              )}{' '}
+              <a href="/privacy" data-local>
+                {t('Your privacy')}
+              </a>
+            </p>
+          </div>
+          <div
+            className={'form-status ' + (saved ? 'success' : '')}
+            role="status"
+            aria-live="polite"
+          >
+            {saved && <h3>{t('Response received')}</h3>}
+            {t(status)}
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function PrivacyPage() {
+  return (
+    <>
+      <Hero
+        title="Your privacy"
+        id="DSC09204"
+        subtitle="A few words about your wedding response."
+        next="privacy-details"
+      />
+      <article className="privacy-copy" id="privacy-details">
+        <h2>Your wedding response</h2>
+        <p>
+          The RSVP form saves your name, phone number, attendance choice, party
+          size, which side you are celebrating with, and any message you choose
+          to leave. These details are for Getayawkal and Shalom to plan their
+          wedding.
+        </p>
+        <h2>Saving and updating</h2>
+        <p>
+          Responses are stored in the website’s database. A response identifier
+          in your browser session lets you update your response from the same
+          tab without creating a duplicate. Your language choice and whether you
+          have opened the invitation are also remembered on this device. If you
+          need a saved response corrected or removed, contact the couple
+          directly.
+        </p>
+        <h2>Photos and other websites</h2>
+        <p>
+          The photos shown here were supplied by the couple. Google Maps,
+          calendar links, and the Telegram group open external services with
+          their own privacy settings. Photos you share in the Telegram group are
+          visible according to that group’s settings.
+        </p>
+        <Action href="/rsvp">{'Kindly RSVP'}</Action>
+      </article>
+    </>
+  );
+}
+
+function Footer({ onReplay }: { onReplay: () => void }) {
+  const { t } = useWords();
+  return (
+    <footer className="site-footer">
+      <Photo id="DSC09004" className="footer-photo" />
+      <div className="footer-wash" />
+      <div className="footer-top">
+        <div>
+          <Label>{'With love, always.'}</Label>
+          <h2>{t("We can't wait to celebrate with you.")}</h2>
+          <Action href="/rsvp">{'Kindly RSVP'}</Action>
+        </div>
+        <div className="footer-links">
+          {navigation
+            .filter((_, i) => [0, 1, 2, 3, 4, 8].includes(i))
+            .map(([href, label]) => (
+              <a href={href} data-local key={href}>
+                {t(label)}
+              </a>
+            ))}
+        </div>
+        <div className="footer-small">
+          <p>
+            21 November 2026
+            <br />
+            {t('Kotabe Full Gospel Church')}
+            <br />
+            {t('Addis Ababa, Ethiopia')}
+          </p>
+          <button onClick={onReplay}>{t('Replay invitation')} ↗</button>
+          <a href="/privacy" data-local>
+            {t('Your privacy')}
+          </a>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p className="label">{t('With love, always.')} / 2026</p>
+        <span>
+          GETAYAWKAL <i>&</i> SHALOM
+        </span>
+      </div>
+    </footer>
+  );
+}
+
+export default function WeddingSite({ initialPage }: { initialPage: string }) {
+  const [page, setPage] = useState(initialPage);
+  const [language, setLanguage] = useState<Language>('en');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [intro, setIntro] = useState(true);
+  const [transition, setTransition] = useState(false);
+  const [viewer, setViewer] = useState<number | null>(null);
+  const [sound, setSound] = useState(false);
+  const [soundError, setSoundError] = useState(false);
+  const [draft, setDraft] = useState(initialDraft);
+  const audio = useRef<HTMLAudioElement | null>(null);
+  const routeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastPhotoFocus = useRef<HTMLElement | null>(null);
+  const t = (text: string) =>
+    language === 'am'
+      ? extraAm[text] ||
+        (previousTranslations as Record<string, string>)[text] ||
+        text
+      : text;
+  useMotion(page, language);
+  useEffect(() => {
+    try {
+      const lang = localStorage.getItem('gs-language');
+      if (lang === 'am' || lang === 'en') setLanguage(lang);
+    } catch {}
+    const pop = () => {
+      setPage(location.pathname.split('/').filter(Boolean)[0] || 'invitation');
+      setMenuOpen(false);
+      setViewer(null);
+    };
+    addEventListener('popstate', pop);
+    return () => {
+      removeEventListener('popstate', pop);
+      if (routeTimer.current) clearTimeout(routeTimer.current);
+      audio.current?.pause();
+    };
+  }, [initialPage]);
+  useEffect(() => {
+    document.documentElement.lang = language;
+    try {
+      localStorage.setItem('gs-language', language);
+    } catch {}
+  }, [language]);
+  useEffect(() => {
+    document.title =
+      (pageNames[page] || 'Our wedding') + ' — Getayawkal & Shalom';
+  }, [page]);
+  function go(href: string) {
+    const url = new URL(href, location.origin);
+    const next = url.pathname.split('/').filter(Boolean)[0] || 'invitation';
+    if (!(next in pageNames)) return;
+    setMenuOpen(false);
+    if (routeTimer.current) clearTimeout(routeTimer.current);
+    if (page === next) {
+      history.pushState({}, '', url.pathname + url.hash);
+      if (url.hash)
+        document
+          .getElementById(url.hash.slice(1))
+          ?.scrollIntoView({
+            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+              ? 'instant'
+              : 'smooth',
+          });
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    setTransition(true);
+    routeTimer.current = setTimeout(
+      () => {
+        setPage(next);
+        history.pushState({}, '', url.pathname + url.hash);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        setTransition(false);
+        requestAnimationFrame(() => {
+          if (url.hash)
+            document
+              .getElementById(url.hash.slice(1))
+              ?.scrollIntoView({ behavior: 'instant' });
+          document
+            .getElementById('page-content')
+            ?.focus({ preventScroll: true });
+        });
+      },
+      matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 360,
+    );
+  }
+  async function toggleSound() {
+    if (!audio.current) {
+      audio.current = new Audio('/wedding-song.mp3');
+      audio.current.loop = true;
+      audio.current.volume = 0.35;
+    }
+    try {
+      if (audio.current.paused) {
+        await audio.current.play();
+        setSound(true);
+      } else {
+        audio.current.pause();
+        setSound(false);
+      }
+      setSoundError(false);
+    } catch {
+      setSoundError(true);
+      setSound(false);
+    }
+  }
+  function enter() {
+    setPage('invitation');
+    history.replaceState({}, '', '/invitation');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setIntro(false);
+    document.getElementById('page-content')?.focus({ preventScroll: true });
+  }
+  function replay() {
+    if (page !== 'invitation') go('/invitation');
+    setMenuOpen(false);
+    setIntro(true);
+  }
+  function openPhoto(n: number) {
+    lastPhotoFocus.current = document.activeElement as HTMLElement;
+    setViewer(n);
+  }
+  return (
+    <LanguageContext.Provider value={{ language, t }}>
+      <div
+        className="wedding-app"
+        onClick={(e) => {
+          const a = (e.target as Element).closest<HTMLAnchorElement>(
+            'a[data-local]',
+          );
+          if (
+            a &&
+            !e.defaultPrevented &&
+            e.button === 0 &&
+            !e.metaKey &&
+            !e.ctrlKey &&
+            !e.shiftKey &&
+            !e.altKey
+          ) {
+            e.preventDefault();
+            go(a.getAttribute('href')!);
+          }
+        }}
+      >
+        <a className="skip-link" href="#page-content">
+          Skip to content
+        </a>
+        <Navigation
+          open={menuOpen}
+          setOpen={setMenuOpen}
+          language={language}
+          setLanguage={setLanguage}
+        />
+        <div
+          className={'page-curtain ' + (transition ? 'cover' : '')}
+          aria-hidden="true"
+        >
+          <Mark />
+        </div>
+        <div
+          id="page-content"
+          tabIndex={-1}
+          className="page-content"
+          key={page}
+        >
+          <main>
+            {page === 'invitation' ? (
+              <HomePage />
+            ) : page === 'celebration' ? (
+              <CelebrationPage />
+            ) : page === 'moments' ? (
+              <MomentsPage onPhoto={openPhoto} />
+            ) : page === 'watch' ? (
+              <WatchPage />
+            ) : page === 'share' ? (
+              <SharePage onPhoto={openPhoto} />
+            ) : page === 'our-story' ? (
+              <StoryPage />
+            ) : page === 'rsvp' ? (
+              <RsvpPage draft={draft} setDraft={setDraft} />
+            ) : (
+              <PrivacyPage />
+            )}
+          </main>
+          {page !== 'rsvp' && page !== 'moments' && (
+            <Footer onReplay={replay} />
+          )}
+        </div>
+        <button
+          className={'sound-control ' + (sound ? 'playing' : '')}
+          onClick={toggleSound}
+          aria-pressed={sound}
+          aria-label={sound ? 'Pause music' : 'Play music'}
+        >
+          <span className="sound-bars" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          {t(
+            soundError
+              ? 'Tap to retry music'
+              : sound
+                ? 'Sound on'
+                : 'Sound off',
+          )}
+        </button>
+        <Envelope
+          open={intro}
+          onEnter={enter}
+          onStart={() => {
+            if (!sound) void toggleSound();
+          }}
+        />
+        {viewer !== null && (
+          <PhotoViewer
+            index={viewer}
+            setIndex={setViewer}
+            onClose={() => {
+              setViewer(null);
+              lastPhotoFocus.current?.focus();
+            }}
+          />
+        )}
+      </div>
+    </LanguageContext.Provider>
+  );
 }

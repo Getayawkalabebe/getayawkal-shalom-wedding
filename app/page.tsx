@@ -1,2 +1,4 @@
 import WeddingSite from './wedding-site';
-export default function Home(){return <WeddingSite initialPage="invitation"/>}
+export default function Home() {
+  return <WeddingSite initialPage="invitation" />;
+}
