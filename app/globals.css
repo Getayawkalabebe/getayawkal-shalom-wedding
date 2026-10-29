@@ -92,3 +92,8 @@ html:lang(am) .display-title{font-size:clamp(45px,7vw,110px);line-height:1.3}htm
 .envelope-dialog.unfolding{animation:invitation-dissolve .6s 2.8s ease both}
 @keyframes sealed-invitation-reveal{0%,25%{transform:translateY(0);opacity:1}45%,78%{transform:translateY(-12px) scale(1.035);opacity:1}100%{transform:translateY(-25px) scale(1.12);opacity:0}}
 @media(prefers-reduced-motion:reduce){.sealed-body,.sealed-flap,.sealed-wax,.artwork-envelope .artwork-back{transition:none!important}}
+/* Closed faces sample only blank red paper, never the invitation lettering. */
+.sealed-body,.sealed-flap{background-image:url('/red-paper-texture.webp');background-size:120px 80px;background-repeat:repeat;background-position:center;border-radius:2px}
+.sealed-body{clip-path:none;background-color:#831714}
+.sealed-body:after{content:'';position:absolute;inset:0;background:linear-gradient(145deg,transparent 49.5%,#4b080955 50%,transparent 50.5%),linear-gradient(215deg,transparent 49.5%,#4b080944 50%,transparent 50.5%);pointer-events:none}
+.sealed-flap{clip-path:polygon(0 0,100% 0,52% 62%,50% 63%,48% 62%);filter:brightness(.85);box-shadow:none}
