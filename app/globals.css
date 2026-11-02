@@ -3320,3 +3320,174 @@ html:lang(am) .rsvp-form-panel h2 {
     justify-content: center;
   }
 }
+/* Celebration: each complete timeline entry is a single immersive screen. */
+.schedule-section {
+  display: block;
+  padding: 0;
+  scroll-margin-top: 90px;
+}
+.schedule-filter {
+  position: relative;
+  top: auto;
+  padding: 70px 6% 45px;
+  max-width: none;
+}
+.schedule-filter .pill-group,
+.schedule-filter .time-switch {
+  max-width: 540px;
+}
+.schedule-events {
+  display: block;
+  gap: 0;
+}
+.event-card {
+  position: relative;
+  isolation: isolate;
+  min-height: 620px;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--pine);
+  color: var(--paper);
+  margin: 0;
+}
+.event-card .event-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.event-card .event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 43%;
+}
+.event-card .event-image:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #13201922 0%,
+    transparent 28%,
+    #101d1644 48%,
+    #101d16e8 100%
+  );
+}
+.event-card .event-image > span {
+  position: absolute;
+  top: 105px;
+  left: 6%;
+  z-index: 1;
+  color: var(--paper);
+}
+.event-card .event-content {
+  position: absolute;
+  z-index: 2;
+  left: 6%;
+  right: 6%;
+  bottom: clamp(36px, 7svh, 90px);
+  padding: 0;
+  max-width: 750px;
+  color: var(--paper);
+}
+.event-card .event-content h2 {
+  font-size: clamp(48px, 6vw, 90px);
+  line-height: 1.05;
+  margin: 15px 0 20px;
+  color: var(--paper);
+}
+.event-card .event-content > .label {
+  color: #eee6cc;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+.event-card .event-content > p:not(.label) {
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.event-card .event-content .fine-text {
+  color: #eee6cc;
+  font-size: 15px;
+}
+@supports (animation-timeline: view()) {
+  .event-card .event-image img {
+    animation: timeline-photo ease both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+  .event-card .event-content {
+    animation: timeline-copy ease both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 85%;
+  }
+}
+@keyframes timeline-photo {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes timeline-copy {
+  from {
+    opacity: 0.15;
+    translate: 0 25px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (max-width: 700px) {
+  .schedule-filter {
+    padding: 60px 6% 35px;
+  }
+  .event-card {
+    height: 100svh;
+    min-height: 560px;
+  }
+  .event-card .event-content {
+    left: 7%;
+    right: 7%;
+    bottom: max(35px, env(safe-area-inset-bottom));
+  }
+  .event-card .event-content h2 {
+    font-size: clamp(42px, 12vw, 62px);
+    margin: 12px 0 16px;
+  }
+  .event-card .event-content > .label {
+    font-size: 11px;
+    line-height: 1.7;
+    letter-spacing: 0.08em;
+  }
+  .event-card .event-content > p:not(.label) {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .event-card .event-content .fine-text {
+    font-size: 13px;
+  }
+  .event-card .event-image img {
+    object-position: 50% 38%;
+  }
+  .event-card .event-image:after {
+    background: linear-gradient(
+      180deg,
+      #101d1622,
+      transparent 20%,
+      #101d1622 40%,
+      #101d16aa 67%,
+      #101d16f2 100%
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-card .event-image img,
+  .event-card .event-content {
+    animation: none !important;
+  }
+}
