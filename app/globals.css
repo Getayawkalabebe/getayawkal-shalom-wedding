@@ -3243,3 +3243,80 @@ html:lang(am) .rsvp-form-panel h2 {
     padding: 65px 7%;
   }
 }
+/* The names and announcement form one readable introduction, clear of the portrait. */
+.home-hero-portrait .home-heading {
+  top: 22%;
+  left: 4%;
+  right: 58%;
+}
+.home-hero-portrait .home-heading h1 {
+  font-size: clamp(38px, 4.1vw, 78px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+.home-announcement {
+  margin-top: 32px;
+  font-family: var(--font-sans, Arial), sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--paper);
+}
+.home-announcement p {
+  margin: 0 0 15px;
+}
+.home-announcement-date {
+  font-family: Editorial, serif;
+  font-size: clamp(22px, 2vw, 35px);
+  line-height: 1.35;
+}
+.home-hero-portrait .home-bottom {
+  justify-content: flex-end;
+}
+@media (max-width: 700px) {
+  .home-hero-portrait {
+    display: flex;
+    flex-direction: column;
+  }
+  .home-hero-portrait .home-heading {
+    position: relative;
+    inset: auto;
+    order: 0;
+    padding: 112px 22px 32px;
+    background: var(--paper);
+    color: var(--pine);
+    text-align: center;
+  }
+  .home-hero-portrait .home-heading h1 {
+    font-size: clamp(36px, 10.5vw, 65px);
+    line-height: 1.05;
+  }
+  .home-hero-portrait .home-heading h1 > span + span {
+    margin-top: 6px;
+    text-align: center;
+    font-size: inherit;
+  }
+  .home-hero-portrait .home-announcement {
+    margin-top: 22px;
+    color: var(--pine);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .home-hero-portrait .home-announcement p {
+    margin-bottom: 10px;
+  }
+  .home-hero-portrait .home-announcement-date {
+    font-size: 25px;
+  }
+  .home-hero-portrait .home-portrait {
+    order: 1;
+    width: 100%;
+    margin: 0;
+  }
+  .home-hero-portrait .home-bottom {
+    order: 2;
+    min-height: 92px;
+    padding: 24px;
+    justify-content: center;
+  }
+}

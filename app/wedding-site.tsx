@@ -906,24 +906,25 @@ function HomePage() {
         </picture>
         <div className="hero-shade" />
         <div className="home-heading">
-          <p className="label">{t('Our forever begins')}</p>
           <h1 aria-label="Getayawkal and Shalom">
             <span>GETAYAWKAL</span>
             <span>
               <i>&</i> SHALOM
             </span>
           </h1>
+          <div className="home-announcement">
+            <p>are celebrating their wedding on</p>
+            <p className="home-announcement-date">
+              Saturday, November 21, 2026
+            </p>
+            <p>
+              Kotabe Full Gospel Church
+              <br />
+              Addis Ababa, Ethiopia
+            </p>
+          </div>
         </div>
         <div className="home-bottom">
-          <p className="label">
-            {language === 'am'
-              ? 'ህዳር 12 2019 አ.ም'
-              : 'Saturday, November 21, 2026'}
-            <br />
-            {t('Kotabe Full Gospel Church')}
-            <br />
-            {t('Addis Ababa, Ethiopia')}
-          </p>
           <a
             href="#chapter"
             className="circle-down"
