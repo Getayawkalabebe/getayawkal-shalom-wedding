@@ -3953,3 +3953,109 @@ html:lang(am) .rsvp-form-panel h2 {
     animation: none;
   }
 }
+/* Opening portrait: deep-green editorial type on a soft paper-toned fade. */
+.home-hero-portrait .hero-shade {
+  background: linear-gradient(
+    180deg,
+    #f9f6e700,
+    transparent 32%,
+    #f9f6e722 48%,
+    #f9f6e7cc 66%,
+    #f9f6e7f5 87%,
+    #f9f6e7 100%
+  );
+}
+.home-hero-portrait .home-heading {
+  color: var(--pine);
+  bottom: 30px;
+  max-width: 850px;
+  text-shadow: none;
+}
+.home-hero-portrait .home-heading h1 {
+  font-weight: 300;
+  color: var(--pine);
+  letter-spacing: -0.035em;
+  font-size: clamp(40px, 5vw, 74px);
+}
+.home-hero-portrait .home-heading h1 i {
+  font-style: italic;
+  color: #818463;
+}
+.home-hero-portrait .home-announcement {
+  color: var(--pine);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+.home-hero-portrait .home-announcement > p:first-child {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.home-hero-portrait .home-announcement-date {
+  font-size: clamp(22px, 2.2vw, 31px);
+}
+.home-hero-portrait .countdown {
+  gap: 30px;
+  margin: 20px 0 18px;
+}
+.home-hero-portrait .countdown span {
+  color: var(--pine);
+  font-size: 36px;
+  font-variant-numeric: tabular-nums;
+}
+.home-hero-portrait .countdown small {
+  color: #626b57;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+}
+.home-hero-portrait .home-heading > .action {
+  background: var(--pine);
+  color: var(--paper);
+  border-color: var(--pine);
+  padding: 13px 25px;
+}
+.home-hero-portrait .home-heading > .action:hover {
+  background: #47573b;
+}
+@media (max-width: 700px) {
+  .home-hero-portrait .hero-shade {
+    background: linear-gradient(
+      180deg,
+      transparent 29%,
+      #f9f6e700 40%,
+      #f9f6e766 53%,
+      #f9f6e7e8 68%,
+      #f9f6e7fa 88%,
+      #f9f6e7 100%
+    );
+  }
+  .home-hero-portrait .home-heading {
+    bottom: 24px;
+    left: 6%;
+    right: 6%;
+  }
+  .home-hero-portrait .home-heading h1 {
+    font-size: clamp(32px, 8.6vw, 45px);
+    line-height: 1.04;
+  }
+  .home-hero-portrait .home-heading h1 > span + span {
+    margin-top: 2px;
+  }
+  .home-hero-portrait .home-announcement {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  .home-hero-portrait .home-announcement-date {
+    font-size: 22px;
+  }
+  .home-hero-portrait .home-announcement p {
+    margin-bottom: 6px;
+  }
+  .home-hero-portrait .countdown {
+    gap: 23px;
+    margin: 15px 0;
+  }
+  .home-hero-portrait .countdown span {
+    font-size: 29px;
+  }
+}
