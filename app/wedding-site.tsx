@@ -1249,8 +1249,6 @@ function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
             <span className="label">
               {pad(active + 1)} / {pad(photos.length)}
             </span>
-            <h2>{t(photos[active].title)}</h2>
-            <p className="fine-text">{t(photos[active].alt)}</p>
           </div>
           <div className="experience-toolbar">
             <button
@@ -1300,7 +1298,6 @@ function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
                       <Photo id={p.id} />
                       <span>↗</span>
                     </div>
-                    <h2>{t(p.title)}</h2>
                     <p className="label">
                       {pad(i + 1)} / {t(p.category)}
                     </p>
