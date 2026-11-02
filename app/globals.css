@@ -3837,3 +3837,31 @@ html:lang(am) .rsvp-form-panel h2 {
   background: var(--paper);
   color: var(--blue);
 }
+.guest-details,
+.guest-details .split-selector {
+  background: var(--pine);
+  color: var(--paper);
+}
+.guest-details .section-title,
+.guest-details .selector-info p {
+  color: var(--paper);
+}
+.guest-details .section-header > .label,
+.guest-details .selector-info .fine-text {
+  color: #ddd8c3;
+}
+.guest-details .selector-options button {
+  color: #c4bea4;
+}
+.guest-details .selector-options button[aria-pressed='true'],
+.guest-details .selector-options button:hover {
+  color: var(--paper);
+}
+.guest-details .action {
+  color: var(--paper);
+  border-color: #eee9d7aa;
+}
+.guest-details .action:hover {
+  background: var(--paper);
+  color: var(--pine);
+}
