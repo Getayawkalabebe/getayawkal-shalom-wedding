@@ -567,8 +567,8 @@ function ScrollChapters() {
       body: 'We’ve saved a place for you. Let us know if you can join us.',
       image: 'chapter-together',
       other: 'DSC09200',
-      href: '/rsvp',
-      action: 'Join Us',
+      href: '/watch',
+      action: 'Watch live',
     },
   ];
   return (
