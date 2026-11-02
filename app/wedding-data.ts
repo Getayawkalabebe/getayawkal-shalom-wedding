@@ -8,7 +8,7 @@ export const pageNames: Record<string, string> = {
   watch: 'Watch the ceremony',
   share: 'Share your memories',
   'our-story': 'Getayawkal & Shalom',
-  rsvp: 'Kindly RSVP',
+  rsvp: 'Join Us',
   privacy: 'Your privacy',
 };
 export const navigation = [
@@ -19,7 +19,7 @@ export const navigation = [
   ['/share', 'Share your memories'],
   ['/invitation#venue', 'The venue'],
   ['/invitation#details', 'Guest details'],
-  ['/rsvp', 'Kindly RSVP'],
+  ['/rsvp', 'Join Us'],
   ['/our-story', 'About us'],
 ];
 export const photos = [
@@ -109,7 +109,7 @@ export const events = [
 ];
 export const extraAm: Record<string, string> = {
   'The invitation': 'ግብዣችን',
-  'Kindly RSVP': 'መገኘትዎን ያረጋግጡ',
+  'Join Us': 'መገኘትዎን ያረጋግጡ',
   'About us': 'ስለ እኛ',
   'The venue': 'የሠርጉ ቦታ',
   'Guest details': 'የእንግዶች መረጃ',

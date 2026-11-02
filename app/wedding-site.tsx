@@ -445,7 +445,7 @@ function Navigation({
             <Mark />
           </a>
           <a className="capsule-rsvp" href="/rsvp" data-local>
-            <Rolling>{'Kindly RSVP'}</Rolling>
+            <Rolling>{'Join Us'}</Rolling>
             <Arrow />
           </a>
         </div>
@@ -558,8 +558,8 @@ function ScrollChapters() {
       body: 'By the grace and will of God, and bound by love, we invite you to witness our sacred promise as we unite in holy matrimony.',
       image: 'DSC09039',
       other: 'DSC09102',
-      href: '/moments',
-      action: 'Explore our moments',
+      href: '/rsvp',
+      action: 'Join Us',
     },
     {
       label: 'You are part of our story',
@@ -568,7 +568,7 @@ function ScrollChapters() {
       image: 'DSC09080',
       other: 'DSC09200',
       href: '/rsvp',
-      action: 'Kindly RSVP',
+      action: 'Join Us',
     },
   ];
   return (
@@ -752,7 +752,7 @@ function GuestDetails() {
         'Enter your name, phone number, and the number attending, including you.',
       image: 'DSC05543',
       href: '/rsvp',
-      action: 'Kindly RSVP',
+      action: 'Join Us',
     },
     {
       title: 'From afar',
@@ -932,7 +932,7 @@ function HomePage() {
           >
             <Arrow down />
           </a>
-          <Action href="/rsvp">{'Kindly RSVP'}</Action>
+          <Action href="/rsvp">{'Join Us'}</Action>
         </div>
       </section>
       <section className="faith-section home-faith">
@@ -1039,7 +1039,7 @@ function CelebrationPage() {
         <Label>{'With grateful hearts'}</Label>
         <Words>{'A day made more beautiful with you.'}</Words>
         <Action href="/rsvp" fill>
-          {'Kindly RSVP'}
+          {'Join Us'}
         </Action>
       </section>
     </>
@@ -1318,7 +1318,7 @@ function WatchPage() {
       <section className="ceremony-note slate">
         <Label>{'Across the miles. Together in love.'}</Label>
         <Words>{'Near or far, you’re part of our day.'}</Words>
-        <Action href="/rsvp">{'Kindly RSVP'}</Action>
+        <Action href="/rsvp">{'Join Us'}</Action>
       </section>
     </>
   );
@@ -1402,7 +1402,7 @@ function StoryPage() {
         eyebrow="Getayawkal & Shalom"
         subtitle="With grateful hearts, we invite you to witness our vows, share in our joy, and surround this new beginning with your love and prayers."
         href="/rsvp"
-        action="Kindly RSVP"
+        action="Join Us"
       />
       <section id="chapter" className="story-editorial">
         <div className="story-heading">
@@ -1554,7 +1554,7 @@ function RsvpPage({
         </div>
       </div>
       <div className="rsvp-form-panel">
-        <Label>{'Kindly RSVP'}</Label>
+        <Label>{'Join Us'}</Label>
         <h2>
           {t('We’ve saved a place for you. Let us know if you can join us.')}
         </h2>
@@ -1730,7 +1730,7 @@ function PrivacyPage() {
           their own privacy settings. Photos you share in the Telegram group are
           visible according to that group’s settings.
         </p>
-        <Action href="/rsvp">{'Kindly RSVP'}</Action>
+        <Action href="/rsvp">{'Join Us'}</Action>
       </article>
     </>
   );
@@ -1746,7 +1746,7 @@ function Footer({ onReplay }: { onReplay: () => void }) {
         <div>
           <Label>{'With love, always.'}</Label>
           <h2>{t("We can't wait to celebrate with you.")}</h2>
-          <Action href="/rsvp">{'Kindly RSVP'}</Action>
+          <Action href="/rsvp">{'Join Us'}</Action>
         </div>
         <div className="footer-links">
           {navigation
