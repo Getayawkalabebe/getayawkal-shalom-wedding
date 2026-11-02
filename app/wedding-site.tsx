@@ -1923,7 +1923,7 @@ export default function WeddingSite({ initialPage }: { initialPage: string }) {
   }
   async function toggleSound() {
     if (!audio.current) {
-      audio.current = new Audio('/wedding-song.mp3');
+      audio.current = new Audio('/gratitude.m4a');
       audio.current.loop = true;
       audio.current.volume = 0.35;
     }
