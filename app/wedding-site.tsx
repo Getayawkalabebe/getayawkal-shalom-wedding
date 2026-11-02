@@ -758,14 +758,82 @@ function GuestDetails() {
             <Action href={active.href}>{active.action}</Action>
           </div>
         </div>
-        <div className="selector-images">
-          {options.map((o, i) => (
-            <Photo
-              id={o.image}
-              key={o.image}
-              className={selected === i ? 'active' : ''}
-            />
-          ))}
+      </div>
+    </section>
+  );
+}
+
+function MemoriesSlideshow() {
+  const slides = [
+    ...photos,
+    { id: 'home-portrait', alt: 'A quiet black-and-white wedding portrait' },
+    { id: 'home-forest-mobile', alt: 'Together on the forest path' },
+    {
+      id: 'memory-night-bw',
+      alt: 'Together beneath the city lights in black and white',
+    },
+    {
+      id: 'memory-night-color',
+      alt: 'An evening together in the red convertible',
+    },
+  ];
+  const [active, setActive] = useState(0),
+    [paused, setPaused] = useState(false);
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setPaused(media.matches);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      if (!document.hidden) setActive((i) => (i + 1) % slides.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [paused, slides.length]);
+  const move = (delta: number) => {
+    setPaused(true);
+    setActive((i) => (i + delta + slides.length) % slides.length);
+  };
+  return (
+    <section
+      className="memories-slideshow"
+      aria-label="Our memories photo slideshow"
+      aria-roledescription="carousel"
+    >
+      <div className="memories-heading">
+        <Label>{'Our memories'}</Label>
+        <h2>A lifetime of little moments.</h2>
+      </div>
+      <div
+        className="memories-frame"
+        onMouseEnter={() => setPaused(true)}
+        onFocusCapture={() => setPaused(true)}
+      >
+        <img
+          key={slides[active].id}
+          src={photo(slides[active].id)}
+          alt={slides[active].alt}
+          decoding="async"
+        />
+        <div className="memories-controls">
+          <button onClick={() => move(-1)} aria-label="Previous memory">
+            ←
+          </button>
+          <button
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
+          >
+            {paused ? 'Play' : 'Pause'}
+          </button>
+          <span aria-live={paused ? 'polite' : 'off'}>
+            {pad(active + 1)} / {pad(slides.length)}
+          </span>
+          <button onClick={() => move(1)} aria-label="Next memory">
+            →
+          </button>
         </div>
       </div>
     </section>
@@ -901,6 +969,7 @@ function HomePage() {
       <Venue />
       <CelebrationPreview />
       <GuestDetails />
+      <MemoriesSlideshow />
     </>
   );
 }
@@ -1717,11 +1786,17 @@ function PrivacyPage() {
   );
 }
 
-function Footer({ onReplay }: { onReplay: () => void }) {
+function Footer({
+  onReplay,
+  showPhoto = true,
+}: {
+  onReplay: () => void;
+  showPhoto?: boolean;
+}) {
   const { t } = useWords();
   return (
     <footer className="site-footer">
-      <Photo id="DSC09004" className="footer-photo" />
+      {showPhoto && <Photo id="DSC09004" className="footer-photo" />}
       <div className="footer-wash" />
       <div className="footer-top">
         <div>
@@ -1945,7 +2020,7 @@ export default function WeddingSite({ initialPage }: { initialPage: string }) {
             )}
           </main>
           {page !== 'rsvp' && page !== 'moments' && (
-            <Footer onReplay={replay} />
+            <Footer onReplay={replay} showPhoto={page !== 'invitation'} />
           )}
         </div>
         <button
