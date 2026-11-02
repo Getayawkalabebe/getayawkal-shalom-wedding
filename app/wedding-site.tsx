@@ -555,7 +555,7 @@ function ScrollChapters() {
     {
       label: 'A new chapter',
       title: 'A promise for life',
-      body: 'By the grace and will of God, and bound by love\nwe invite you to be a witness to our sacred promise\nas we unite in holy matrimony.',
+      body: 'By the grace and will of God, and bound by love, we invite you to witness our sacred promise as we unite in holy matrimony.',
       image: 'DSC09039',
       other: 'DSC09102',
       href: '/moments',
