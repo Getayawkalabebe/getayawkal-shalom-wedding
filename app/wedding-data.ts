@@ -24,12 +24,6 @@ export const navigation = [
 ];
 export const photos = [
   {
-    id: 'chapter-together',
-    alt: 'Getayawkal and Shalom walking arm in arm with golf clubs beside the water',
-    title: 'Side by side',
-    category: 'Together',
-  },
-  {
     id: 'DSC09004',
     alt: 'Getayawkal and Shalom beside a red convertible on a tree-lined road',
     title: 'The adventure',
@@ -82,6 +76,12 @@ export const photos = [
     alt: 'Walking together across the green',
     title: 'Side by side',
     category: 'Little moments',
+  },
+  {
+    id: 'chapter-together',
+    alt: 'Getayawkal and Shalom walking arm in arm with golf clubs beside the water',
+    title: 'Side by side',
+    category: 'Together',
   },
 ];
 export const events = [
