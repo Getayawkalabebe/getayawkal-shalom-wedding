@@ -1422,103 +1422,6 @@ button:hover .rolling > span + span {
   gap: 6px;
   margin: 20px 0;
 }
-.photo-stage {
-  position: relative;
-  height: 48svh;
-  min-height: 310px;
-  perspective: 1300px;
-  touch-action: pan-y;
-  outline-offset: -8px;
-}
-.stage-photo {
-  position: absolute;
-  left: 33%;
-  top: 5%;
-  width: 34%;
-  height: 90%;
-  padding: 0;
-  overflow: hidden;
-  transition:
-    transform 0.8s var(--ease),
-    opacity 0.8s;
-  box-shadow: 0 12px 40px #2e3a261a;
-}
-.stage-photo img {
-  height: 100%;
-  pointer-events: none;
-}
-.offset-2 {
-  z-index: 3;
-  transform: translateX(0);
-}
-.offset-1 {
-  z-index: 2;
-  transform: translateX(-100%) scale(0.82) rotateY(24deg);
-  opacity: 0.8;
-}
-.offset-3 {
-  z-index: 2;
-  transform: translateX(100%) scale(0.82) rotateY(-24deg);
-  opacity: 0.8;
-}
-.offset-0 {
-  transform: translateX(-190%) scale(0.65) rotateY(32deg);
-  opacity: 0.4;
-}
-.offset-4 {
-  transform: translateX(190%) scale(0.65) rotateY(-32deg);
-  opacity: 0.4;
-}
-.stage-expand {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #fff8;
-  border-radius: 50%;
-  color: white;
-}
-.moment-caption {
-  text-align: center;
-  margin: 20px 15px;
-}
-.moment-caption h2 {
-  font-size: 30px;
-  margin: 7px;
-}
-.moment-caption .fine-text {
-  max-width: 550px;
-  margin: auto;
-}
-.experience-toolbar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  margin-top: 20px;
-}
-.experience-toolbar > button {
-  font-size: 24px;
-  min-width: 44px;
-  min-height: 44px;
-}
-.photo-dots {
-  display: flex;
-  gap: 5px;
-}
-.photo-dots button {
-  font-size: 10px;
-  min-width: 32px;
-  min-height: 40px;
-  opacity: 0.4;
-}
-.photo-dots [aria-pressed='true'] {
-  opacity: 1;
-  border-bottom: 1px solid var(--pine);
-}
 .gallery-filters {
   justify-content: center;
 }
@@ -2312,34 +2215,6 @@ button:hover .rolling > span + span {
   }
   .moments-heading .label {
     font-size: 9px;
-  }
-  .photo-stage {
-    height: 44svh;
-    min-height: 320px;
-  }
-  .stage-photo {
-    left: 15%;
-    width: 70%;
-  }
-  .offset-1 {
-    transform: translateX(-97%) scale(0.82) rotateY(24deg);
-  }
-  .offset-3 {
-    transform: translateX(97%) scale(0.82) rotateY(-24deg);
-  }
-  .moment-caption .fine-text {
-    font-size: 11px;
-    max-width: 300px;
-  }
-  .experience-toolbar {
-    gap: 4px;
-  }
-  .photo-dots {
-    gap: 0;
-  }
-  .photo-dots button {
-    min-width: 27px;
-    min-height: 44px;
   }
   .gallery-filters {
     padding: 0 20px;
@@ -4086,5 +3961,80 @@ html:lang(am) .rsvp-form-panel h2 {
       transparent 35%,
       #101d1699 100%
     );
+  }
+}
+
+/* A continuous curved gallery, with no frames, captions, or timeline. */
+.moments-experience {
+  padding: 8px 0 24px;
+}
+.moments-orbit {
+  position: relative;
+  height: clamp(360px, 58svh, 650px);
+  perspective: 1200px;
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  outline-offset: -6px;
+}
+.moments-orbit:active {
+  cursor: grabbing;
+}
+.moments-orbit-photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(30vw, 390px);
+  height: 88%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  visibility: hidden;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  cursor: inherit;
+}
+.moments-orbit-photo:first-child {
+  visibility: visible;
+  transform: translate(-50%, -50%);
+}
+.moments-orbit-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.moments-orbit-photo:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 5px;
+}
+.moments-orbit-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 8px;
+}
+.moments-orbit-controls button {
+  min-width: 48px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--pine);
+}
+.moments-orbit-controls button:nth-child(2) {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+@media (max-width: 699px) {
+  .moments-orbit {
+    height: clamp(340px, 53svh, 580px);
+    perspective: 850px;
+  }
+  .moments-orbit-photo {
+    width: 64vw;
   }
 }

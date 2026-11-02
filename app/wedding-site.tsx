@@ -10,6 +10,7 @@ import React, {
   type FormEvent,
   type ReactNode,
 } from 'react';
+import MomentsExperience from './moments-experience';
 import previousTranslations from '../public/translations-am.json';
 import {
   date,
@@ -1168,12 +1169,8 @@ function PhotoViewer({
 
 function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
   const { t } = useWords();
-  const [active, setActive] = useState(0);
   const [grid, setGrid] = useState(false);
   const [filter, setFilter] = useState('All moments');
-  const startX = useRef<number | null>(null);
-  const swiped = useRef(false);
-  const change = (n: number) => setActive((n + photos.length) % photos.length);
   return (
     <section className={'moments-page ' + (grid ? 'grid-mode' : '')}>
       <div className="moments-heading">
@@ -1189,91 +1186,7 @@ function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
         </button>
       </div>
       {!grid ? (
-        <>
-          <div
-            className="photo-stage"
-            tabIndex={0}
-            aria-label="Photo carousel. Use left and right arrows to browse."
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                change(active + 1);
-              }
-              if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                change(active - 1);
-              }
-            }}
-            onPointerDown={(e) => {
-              swiped.current = false;
-              startX.current = e.clientX;
-            }}
-            onPointerUp={(e) => {
-              if (
-                startX.current !== null &&
-                Math.abs(e.clientX - startX.current) > 45
-              ) {
-                swiped.current = true;
-                change(active + (e.clientX < startX.current ? 1 : -1));
-              }
-              startX.current = null;
-            }}
-          >
-            {[-2, -1, 0, 1, 2].map((offset) => {
-              const i = (active + offset + photos.length) % photos.length;
-              return (
-                <button
-                  key={offset}
-                  className={'stage-photo offset-' + (offset + 2)}
-                  onClick={() => {
-                    if (!swiped.current) {
-                      offset ? change(i) : onPhoto(i);
-                    }
-                  }}
-                  aria-label={
-                    offset === 0
-                      ? 'View photo: ' + photos[i].alt
-                      : 'Browse to ' + photos[i].title
-                  }
-                  tabIndex={offset === 0 ? 0 : -1}
-                >
-                  <Photo id={photos[i].id} priority={offset === 0} />
-                  <span className="stage-expand" aria-hidden="true">
-                    ↗
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="moment-caption" aria-live="polite">
-            <span className="label">
-              {pad(active + 1)} / {pad(photos.length)}
-            </span>
-          </div>
-          <div className="experience-toolbar">
-            <button
-              aria-label="Previous photo"
-              onClick={() => change(active - 1)}
-            >
-              ←
-            </button>
-            <div className="photo-dots">
-              {photos.map((p, i) => (
-                <button
-                  key={p.id}
-                  onClick={() => change(i)}
-                  aria-label={'Photo ' + (i + 1) + ': ' + p.title}
-                  aria-pressed={active === i}
-                >
-                  {pad(i + 1)}
-                </button>
-              ))}
-            </div>
-            <button aria-label="Next photo" onClick={() => change(active + 1)}>
-              →
-            </button>
-          </div>
-        </>
+        <MomentsExperience onPhoto={onPhoto} />
       ) : (
         <>
           <div className="gallery-filters pill-group">
@@ -1298,9 +1211,6 @@ function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
                       <Photo id={p.id} />
                       <span>↗</span>
                     </div>
-                    <p className="label">
-                      {pad(i + 1)} / {t(p.category)}
-                    </p>
                   </button>
                 ),
             )}
