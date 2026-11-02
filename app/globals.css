@@ -3491,3 +3491,46 @@ html:lang(am) .rsvp-form-panel h2 {
     animation: none !important;
   }
 }
+.celebration-chapters .celebration-time {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: -12px;
+  margin-bottom: 25px;
+}
+.schedule-summary {
+  padding: 0 6% 70px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.summary-event {
+  border-top: 1px solid #78846a55;
+  padding: 25px 0;
+}
+.summary-event h2 {
+  font-size: 40px;
+  margin: 16px 0;
+}
+.summary-event .event-content {
+  padding: 0;
+}
+@media (max-width: 700px) {
+  .schedule-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .celebration-chapters .chapter-copy > .label {
+    margin-bottom: 16px;
+  }
+  .celebration-chapters .chapter-copy h2 {
+    font-size: clamp(40px, 11vw, 58px);
+  }
+  .celebration-chapters .chapter-copy > p:not(.label) {
+    margin-top: 18px;
+  }
+  .celebration-chapters .chapter-copy > .celebration-time {
+    margin-top: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+}

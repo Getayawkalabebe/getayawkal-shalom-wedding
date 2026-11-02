@@ -959,12 +959,56 @@ function HomePage() {
   );
 }
 
+function CelebrationChapters() {
+  const { t } = useWords();
+  return (
+    <section
+      className="scroll-chapters celebration-chapters"
+      data-scene
+      data-step="0"
+      aria-label="Our wedding day timeline"
+    >
+      <div className="chapter-pin">
+        <div className="ambient-grain" />
+        {events.map((e, i) => (
+          <article className={'scene-panel scene-' + i} key={e.number}>
+            <div className="chapter-copy">
+              <Label>{e.ethiopian + ' · ' + t('Ethiopian time')}</Label>
+              <h2>{t(e.name)}</h2>
+              <p>{t(e.description)}</p>
+              <p className="celebration-time">{e.eat} EAT (UTC+3)</p>
+              <Action href="/rsvp">{'Join Us'}</Action>
+            </div>
+            <div className="chapter-art">
+              <Photo
+                id={i === 0 ? 'DSC09102' : i === 1 ? 'DSC05543' : 'DSC09080'}
+                className="shape-photo shape-small"
+              />
+              <Photo id={e.photo} className="shape-photo shape-large" />
+            </div>
+          </article>
+        ))}
+        <div className="chapter-progress" aria-hidden="true">
+          <span />
+          <div>
+            <b>01</b>
+            <b>02</b>
+            <b>03</b>
+          </div>
+        </div>
+        <p className="chapter-side label">Getayawkal &amp; Shalom</p>
+      </div>
+    </section>
+  );
+}
+
 function CelebrationPage() {
   const { t } = useWords();
   const [filter, setFilter] = useState('All');
   const [time, setTime] = useState('ethiopian');
   return (
     <>
+      <CelebrationChapters />
       <Hero
         title="The celebration"
         id="DSC09039"
@@ -1008,15 +1052,11 @@ function CelebrationPage() {
             <Arrow />
           </button>
         </aside>
-        <div className="schedule-events" aria-live="polite">
+        <div className="schedule-summary" aria-live="polite">
           {events
             .filter((e) => filter === 'All' || e.category === filter)
             .map((e) => (
-              <article className="event-card" key={e.number}>
-                <div className="event-image">
-                  <Photo id={e.photo} />
-                  <span>{e.number}</span>
-                </div>
+              <article className="summary-event" key={e.number}>
                 <div className="event-content">
                   <p className="label">
                     {time === 'ethiopian'
