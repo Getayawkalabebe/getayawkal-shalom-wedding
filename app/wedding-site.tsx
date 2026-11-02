@@ -523,7 +523,7 @@ function Hero({
         {eyebrow && <Label>{eyebrow}</Label>}
         <p>{t(subtitle)}</p>
         {href && action && (
-          <Action href={href} fill>
+          <Action href={href} fill external={href.startsWith('https://')}>
             {action}
           </Action>
         )}
@@ -1384,6 +1384,8 @@ function SharePage({ onPhoto }: { onPhoto: (n: number) => void }) {
         id="DSC09080"
         eyebrow="Through your eyes"
         subtitle="Capture the joy. Share your photos with us on Telegram."
+        href={telegram}
+        action="Join our Telegram group"
         next="share-memories"
       />
       <section className="sharing-section" id="share-memories">

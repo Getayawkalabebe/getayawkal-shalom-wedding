@@ -4059,3 +4059,32 @@ html:lang(am) .rsvp-form-panel h2 {
     font-size: 29px;
   }
 }
+.page-hero:has(a[href^="https://t.me/"]) .hero-description .action
+{
+  margin-top: 22px;
+  max-width: 100%;
+  white-space: normal;
+}
+@media (max-width: 700px) {
+  .page-hero:has(a[href^="https://t.me/"]) .hero-description
+  {
+    left: 7%;
+    width: 86%;
+    bottom: 18%;
+  }
+  .page-hero:has(a[href^="https://t.me/"]) .hero-description .action
+  {
+    padding: 16px 22px;
+    font-size: 10px;
+    gap: 18px;
+  }
+  .page-hero:has(a[href^="https://t.me/"]) .hero-shade
+  {
+    background: linear-gradient(
+      180deg,
+      #101d1633,
+      transparent 35%,
+      #101d1699 100%
+    );
+  }
+}
