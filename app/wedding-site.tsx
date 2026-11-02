@@ -628,13 +628,6 @@ function Venue() {
             {'Get directions'}
           </Action>
         </div>
-        <div className="venue-photo" data-reveal data-parallax>
-          <Photo id="DSC06257" />
-          <div className="venue-photo-label">
-            <span>9° N · ADDIS ABABA</span>
-            <span>THE BEGINNING OF FOREVER</span>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -644,7 +637,7 @@ function CelebrationPreview() {
   const { t } = useWords();
   const [active, setActive] = useState(0);
   return (
-    <section className="split-selector">
+    <section className="split-selector text-only-schedule">
       <div className="selector-copy">
         <Label>{'The celebration'}</Label>
         <div
@@ -695,16 +688,6 @@ function CelebrationPreview() {
           <p className="fine-text">{events[active].eat} EAT (UTC+3)</p>
           <Action href="/celebration">{'Explore the day'}</Action>
         </div>
-      </div>
-      <div className="selector-images">
-        {events.map((e, i) => (
-          <Photo
-            key={e.photo}
-            id={e.photo}
-            className={active === i ? 'active' : ''}
-          />
-        ))}
-        <span className="image-counter">{pad(active + 1)} / 03</span>
       </div>
     </section>
   );
@@ -946,11 +929,6 @@ function HomePage() {
       </section>
       <ScrollChapters />
       <Venue />
-      <section className="full-photo-title" data-parallax>
-        <Photo id="DSC09039" />
-        <Words className="section-title">{'The celebration'}</Words>
-        <p className="label">SATURDAY / 21 NOVEMBER 2026</p>
-      </section>
       <CelebrationPreview />
       <BlueStory />
       <GuestDetails />

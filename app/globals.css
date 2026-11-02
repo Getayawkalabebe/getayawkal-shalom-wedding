@@ -3641,3 +3641,28 @@ html:lang(am) .rsvp-form-panel h2 {
     min-height: 100svh;
   }
 }
+.venue-layout {
+  grid-template-columns: 1fr;
+}
+.venue-copy {
+  max-width: 720px;
+  width: 100%;
+}
+.text-only-schedule {
+  display: block;
+  min-height: 0;
+}
+.text-only-schedule .selector-copy {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 75px 7%;
+  width: 100%;
+}
+.text-only-schedule .selector-info {
+  max-width: 640px;
+}
+@media (max-width: 700px) {
+  .text-only-schedule .selector-copy {
+    padding: 55px 7%;
+  }
+}
