@@ -558,8 +558,8 @@ function ScrollChapters() {
       body: 'By the grace and will of God, and bound by love, we invite you to witness our sacred promise as we unite in holy matrimony.',
       image: 'DSC09039',
       other: 'DSC09102',
-      href: '/rsvp',
-      action: 'Join Us',
+      href: '/share',
+      action: 'Share your memories',
     },
     {
       label: 'You are part of our story',
