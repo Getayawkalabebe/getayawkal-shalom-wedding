@@ -764,79 +764,31 @@ function GuestDetails() {
   );
 }
 
+const memoryPhotos = [
+  ...photos,
+  { id: 'home-portrait', alt: 'A quiet black-and-white wedding portrait' },
+  { id: 'home-forest-mobile', alt: 'Together on the forest path' },
+  {
+    id: 'memory-night-bw',
+    alt: 'Together beneath the city lights in black and white',
+  },
+  {
+    id: 'memory-night-color',
+    alt: 'An evening together in the red convertible',
+  },
+];
+
 function MemoriesSlideshow() {
-  const slides = [
-    ...photos,
-    { id: 'home-portrait', alt: 'A quiet black-and-white wedding portrait' },
-    { id: 'home-forest-mobile', alt: 'Together on the forest path' },
-    {
-      id: 'memory-night-bw',
-      alt: 'Together beneath the city lights in black and white',
-    },
-    {
-      id: 'memory-night-color',
-      alt: 'An evening together in the red convertible',
-    },
-  ];
-  const [active, setActive] = useState(0),
-    [paused, setPaused] = useState(false);
-  useEffect(() => {
-    const media = matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setPaused(media.matches);
-    sync();
-    media.addEventListener('change', sync);
-    return () => media.removeEventListener('change', sync);
-  }, []);
-  useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => {
-      if (!document.hidden) setActive((i) => (i + 1) % slides.length);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, [paused, slides.length]);
-  const move = (delta: number) => {
-    setPaused(true);
-    setActive((i) => (i + delta + slides.length) % slides.length);
-  };
   return (
-    <section
-      className="memories-slideshow"
-      aria-label="Our memories photo slideshow"
-      aria-roledescription="carousel"
-    >
+    <section className="memories-slideshow" aria-label="Our memories">
       <div className="memories-heading">
         <Label>{'Our memories'}</Label>
         <h2>A lifetime of little moments.</h2>
       </div>
-      <div
-        className="memories-frame"
-        onMouseEnter={() => setPaused(true)}
-        onFocusCapture={() => setPaused(true)}
-      >
-        <img
-          key={slides[active].id}
-          src={photo(slides[active].id)}
-          alt={slides[active].alt}
-          decoding="async"
-        />
-        <div className="memories-controls">
-          <button onClick={() => move(-1)} aria-label="Previous memory">
-            ←
-          </button>
-          <button
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
-          >
-            {paused ? 'Play' : 'Pause'}
-          </button>
-          <span aria-live={paused ? 'polite' : 'off'}>
-            {pad(active + 1)} / {pad(slides.length)}
-          </span>
-          <button onClick={() => move(1)} aria-label="Next memory">
-            →
-          </button>
-        </div>
-      </div>
+      <MomentsExperience
+        images={memoryPhotos}
+        label="Our memories photo gallery"
+      />
     </section>
   );
 }

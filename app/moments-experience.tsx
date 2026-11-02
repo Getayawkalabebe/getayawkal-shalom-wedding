@@ -7,8 +7,12 @@ const SECONDS_PER_PHOTO = 8;
 
 export default function MomentsExperience({
   onPhoto,
+  images = photos,
+  label = 'Our moments photo gallery',
 }: {
-  onPhoto: (index: number) => void;
+  onPhoto?: (index: number) => void;
+  images?: readonly { id: string; alt: string }[];
+  label?: string;
 }) {
   const stage = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLButtonElement | null)[]>([]);
@@ -36,12 +40,17 @@ export default function MomentsExperience({
       width = element.clientWidth;
     });
     resize.observe(element);
+    let inView = false;
+    const visibility = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+    });
+    visibility.observe(element);
     let frame = 0;
     let previous = 0;
     const draw = (now: number) => {
       const dt = previous ? Math.min((now - previous) / 1000, 0.05) : 0;
       previous = now;
-      if (!document.hidden) {
+      if (!document.hidden && inView) {
         if (playing && !focused.current && !dragging.current) {
           target.current += dt / SECONDS_PER_PHOTO;
         }
@@ -58,10 +67,10 @@ export default function MomentsExperience({
           const distance =
             ((index -
               position.current +
-              photos.length * 1000 +
-              photos.length / 2) %
-              photos.length) -
-            photos.length / 2;
+              images.length * 1000 +
+              images.length / 2) %
+              images.length) -
+            images.length / 2;
           const angle = distance * 0.6;
           const visible = Math.abs(distance) < 3;
           card.style.visibility = visible ? 'visible' : 'hidden';
@@ -74,11 +83,11 @@ export default function MomentsExperience({
         });
         // Keep long-running loops numerically bounded, without a visible reset.
         if (
-          target.current > photos.length * 100 ||
-          target.current < -photos.length * 100
+          target.current > images.length * 100 ||
+          target.current < -images.length * 100
         ) {
           const cycles =
-            Math.trunc(target.current / photos.length) * photos.length;
+            Math.trunc(target.current / images.length) * images.length;
           target.current -= cycles;
           position.current -= cycles;
         }
@@ -89,8 +98,9 @@ export default function MomentsExperience({
     return () => {
       cancelAnimationFrame(frame);
       resize.disconnect();
+      visibility.disconnect();
     };
-  }, [playing]);
+  }, [playing, images]);
 
   const move = (step: number) => {
     target.current = Math.round(target.current) + step;
@@ -102,7 +112,7 @@ export default function MomentsExperience({
         ref={stage}
         className="moments-orbit"
         role="region"
-        aria-label="Our moments photo gallery. Drag or use the arrow keys to browse."
+        aria-label={label + '. Drag or use the arrow keys to browse.'}
         tabIndex={0}
         onFocus={() => {
           focused.current = true;
@@ -148,17 +158,30 @@ export default function MomentsExperience({
           dragging.current = false;
         }}
       >
-        {photos.map((image, index) => (
+        {images.map((image, index) => (
           <button
             key={image.id}
             ref={(element) => {
               cards.current[index] = element;
             }}
             className="moments-orbit-photo"
-            aria-label={'View photo: ' + image.alt}
+            aria-label={
+              (onPhoto ? 'View photo: ' : 'Browse to photo: ') + image.alt
+            }
             onClick={() => {
               if (travel.current > 8) return;
-              onPhoto(index);
+              if (onPhoto) onPhoto(index);
+              else {
+                const current = Math.round(target.current);
+                const distance =
+                  ((index -
+                    current +
+                    images.length * 1000 +
+                    images.length / 2) %
+                    images.length) -
+                  images.length / 2;
+                target.current = current + distance;
+              }
             }}
           >
             <img
@@ -167,7 +190,7 @@ export default function MomentsExperience({
               draggable={false}
               decoding="async"
               loading={
-                index < 3 || index > photos.length - 3 ? 'eager' : 'lazy'
+                index < 3 || index > images.length - 3 ? 'eager' : 'lazy'
               }
             />
           </button>

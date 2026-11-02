@@ -3745,7 +3745,7 @@ html:lang(am) .rsvp-form-panel h2 {
   min-height: 0;
 }
 .memories-slideshow {
-  padding: 65px 5%;
+  padding: 65px 0 40px;
   background: var(--pine);
   color: var(--paper);
 }
@@ -3757,75 +3757,21 @@ html:lang(am) .rsvp-form-panel h2 {
   font-size: clamp(38px, 5vw, 68px);
   margin-top: 18px;
 }
-.memories-frame {
-  position: relative;
-  height: 80svh;
-  min-height: 420px;
-  max-height: 950px;
-  background: #17221b;
-  overflow: hidden;
-}
-.memories-frame > img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  animation: memory-in 1s ease both;
-  padding-bottom: 70px;
-}
-.memories-controls {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  background: #17221bee;
-  padding: 12px;
+.memories-slideshow .moments-orbit-controls button {
   color: var(--paper);
 }
-.memories-controls button {
-  min-width: 46px;
-  min-height: 46px;
-  border: 1px solid #e9e3cd77;
-  border-radius: 30px;
-  padding: 9px 16px;
-  font-size: 13px;
-  color: inherit;
+.memories-slideshow .moments-orbit-photo:focus-visible {
+  outline-color: var(--paper);
 }
-.memories-controls span {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-}
-@keyframes memory-in {
-  from {
-    opacity: 0;
-    transform: scale(1.015);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.memories-slideshow .moments-experience {
+  padding-bottom: 0;
 }
 @media (max-width: 700px) {
   .memories-slideshow {
-    padding: 50px 0 0;
+    padding: 50px 0 30px;
   }
   .memories-heading {
     padding: 0 7%;
-  }
-  .memories-frame {
-    height: 72svh;
-    min-height: 410px;
-  }
-  .memories-controls {
-    gap: 12px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .memories-frame > img {
-    animation: none;
   }
 }
 /* Opening portrait: deep-green editorial type on a soft paper-toned fade. */
