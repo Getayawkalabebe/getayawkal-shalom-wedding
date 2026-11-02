@@ -3666,3 +3666,142 @@ html:lang(am) .rsvp-form-panel h2 {
     padding: 55px 7%;
   }
 }
+/* One portrait-led opening screen with announcement and live countdown below the faces. */
+.home-hero.home-hero-portrait {
+  display: block;
+  position: relative;
+  height: 100svh;
+  min-height: 760px;
+  overflow: hidden;
+  color: var(--paper);
+}
+.home-hero-portrait .home-portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.home-hero-portrait .home-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+  aspect-ratio: auto;
+}
+.home-hero-portrait .hero-shade {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #101b1511,
+    transparent 30%,
+    #101b1555 48%,
+    #101b16ed 100%
+  );
+}
+.home-hero-portrait .home-heading {
+  position: absolute;
+  inset: auto 5% 35px;
+  z-index: 2;
+  padding: 0;
+  background: none;
+  color: var(--paper);
+  text-align: center;
+  max-width: 900px;
+  margin: auto;
+}
+.home-hero-portrait .home-heading h1 {
+  font-size: clamp(40px, 5.5vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.home-hero-portrait .home-heading h1 > span {
+  display: inline;
+}
+.home-hero-portrait .home-heading h1 > span + span {
+  font-size: inherit;
+  margin: 0 0 0 0.2em;
+  text-align: center;
+}
+.home-hero-portrait .home-announcement {
+  color: var(--paper);
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.home-hero-portrait .home-announcement p {
+  margin-bottom: 7px;
+}
+.home-hero-portrait .home-announcement-date {
+  font-size: 29px;
+}
+.home-hero-portrait .countdown {
+  justify-content: center;
+  margin: 20px 0;
+  gap: 35px;
+}
+.home-hero-portrait .countdown span {
+  font-size: 40px;
+  color: var(--paper);
+}
+.home-hero-portrait .countdown small {
+  color: #e5e2d4;
+  font-size: 9px;
+}
+.home-hero-portrait .home-heading > .action {
+  display: inline-flex;
+}
+@media (max-width: 700px) {
+  .home-hero.home-hero-portrait {
+    height: 100svh;
+    min-height: 700px;
+  }
+  .home-hero-portrait .home-portrait img {
+    object-position: 50% 30%;
+  }
+  .home-hero-portrait .home-heading {
+    inset: auto 5% 26px;
+    padding: 0;
+    width: auto;
+  }
+  .home-hero-portrait .home-heading h1 {
+    font-size: clamp(31px, 8.2vw, 48px);
+    line-height: 1.08;
+  }
+  .home-hero-portrait .home-heading h1 > span {
+    display: block;
+  }
+  .home-hero-portrait .home-heading h1 > span + span {
+    margin: 4px 0 0;
+  }
+  .home-hero-portrait .home-announcement {
+    margin-top: 13px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .home-hero-portrait .home-announcement-date {
+    font-size: 22px;
+  }
+  .home-hero-portrait .countdown {
+    gap: 24px;
+    margin: 16px 0;
+  }
+  .home-hero-portrait .countdown span {
+    font-size: 30px;
+  }
+  .home-hero-portrait .countdown small {
+    font-size: 8px;
+  }
+  .home-hero-portrait .hero-shade {
+    background: linear-gradient(
+      180deg,
+      #101b1511,
+      transparent 25%,
+      #101b1533 43%,
+      #101b16b8 61%,
+      #101b16f5 100%
+    );
+  }
+}

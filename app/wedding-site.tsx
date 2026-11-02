@@ -906,15 +906,7 @@ function HomePage() {
               Addis Ababa, Ethiopia
             </p>
           </div>
-        </div>
-        <div className="home-bottom">
-          <a
-            href="#chapter"
-            className="circle-down"
-            aria-label={t('Scroll to discover')}
-          >
-            <Arrow down />
-          </a>
+          <Countdown />
           <Action href="/rsvp">{'Join Us'}</Action>
         </div>
       </section>
@@ -932,7 +924,6 @@ function HomePage() {
       <CelebrationPreview />
       <BlueStory />
       <GuestDetails />
-      <DateSection />
     </>
   );
 }
