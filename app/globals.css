@@ -3534,3 +3534,110 @@ html:lang(am) .rsvp-form-panel h2 {
     margin-bottom: 20px;
   }
 }
+/* Full-bleed photos retain the pinned three-scene transition. */
+.celebration-chapters .scene-panel {
+  display: block;
+  padding: 0;
+  isolation: isolate;
+}
+.celebration-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.celebration-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+.celebration-backdrop:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #101d1633,
+    transparent 25%,
+    #101d1644 45%,
+    #101d16ee 100%
+  );
+}
+.celebration-chapters .chapter-copy {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 90px;
+  top: auto;
+  max-width: 750px;
+  margin: 0;
+  width: auto;
+  color: var(--paper);
+}
+.celebration-chapters .chapter-copy h2 {
+  font-size: clamp(46px, 6vw, 90px);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+.celebration-chapters .chapter-copy .label {
+  color: #eee6cc;
+  margin-bottom: 16px;
+}
+.celebration-chapters .chapter-copy > p:not(.label) {
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+.celebration-chapters .chapter-copy > .celebration-time {
+  color: #eee6cc;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+.celebration-chapters .chapter-progress,
+.celebration-chapters .chapter-side {
+  z-index: 5;
+}
+@media (max-width: 700px) {
+  .celebration-chapters .chapter-copy {
+    top: auto;
+    bottom: 85px;
+    left: 7%;
+    right: 7%;
+    max-width: none;
+    width: auto;
+  }
+  .celebration-chapters .chapter-copy h2 {
+    font-size: clamp(42px, 12vw, 60px);
+    margin-bottom: 16px;
+  }
+  .celebration-chapters .chapter-copy > p:not(.label) {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .celebration-chapters .chapter-copy > .celebration-time {
+    font-size: 13px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .celebration-chapters .chapter-copy > .label {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .celebration-backdrop:after {
+    background: linear-gradient(
+      180deg,
+      #101d1622,
+      transparent 20%,
+      #101d1622 35%,
+      #101d1699 60%,
+      #101d16f5 100%
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .celebration-chapters .scene-panel {
+    min-height: 100svh;
+  }
+}

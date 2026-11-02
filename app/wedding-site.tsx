@@ -979,12 +979,8 @@ function CelebrationChapters() {
               <p className="celebration-time">{e.eat} EAT (UTC+3)</p>
               <Action href="/rsvp">{'Join Us'}</Action>
             </div>
-            <div className="chapter-art">
-              <Photo
-                id={i === 0 ? 'DSC09102' : i === 1 ? 'DSC05543' : 'DSC09080'}
-                className="shape-photo shape-small"
-              />
-              <Photo id={e.photo} className="shape-photo shape-large" />
+            <div className="celebration-backdrop">
+              <Photo id={e.photo} />
             </div>
           </article>
         ))}
