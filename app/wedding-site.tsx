@@ -565,7 +565,7 @@ function ScrollChapters() {
       label: 'You are part of our story',
       title: 'And you, beside us.',
       body: 'We’ve saved a place for you. Let us know if you can join us.',
-      image: 'DSC09080',
+      image: 'chapter-together',
       other: 'DSC09200',
       href: '/rsvp',
       action: 'Join Us',
