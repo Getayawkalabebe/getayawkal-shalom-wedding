@@ -84,6 +84,66 @@ export const photos = [
     category: 'Together',
   },
 ];
+// One shared, caption-free collection for the homepage and Our moments.
+export const galleryPhotos = [
+  ...photos,
+  { id: 'home-portrait', alt: 'A quiet black-and-white wedding portrait' },
+  { id: 'home-forest-mobile', alt: 'Together on the forest path' },
+  {
+    id: 'memory-night-bw',
+    alt: 'Together beneath the city lights in black and white',
+  },
+  {
+    id: 'memory-night-color',
+    alt: 'An evening together in the red convertible',
+  },
+  {
+    id: 'memory-personal-01',
+    alt: 'Getayawkal and Shalom smiling together on a sofa',
+  },
+  {
+    id: 'memory-personal-02',
+    alt: 'Getayawkal and Shalom holding hands in a flower-filled cafe',
+  },
+  { id: 'memory-personal-03', alt: 'A mirror selfie together' },
+  {
+    id: 'memory-personal-04',
+    alt: "Shalom resting her head on Getayawkal's shoulder",
+  },
+  { id: 'memory-personal-05', alt: 'Together visiting a car exhibition' },
+  { id: 'memory-personal-06', alt: 'A casual selfie together' },
+  {
+    id: 'memory-personal-07',
+    alt: 'Getayawkal and Shalom seated together against a green wall',
+  },
+  { id: 'memory-personal-08', alt: 'Together in an elevator mirror' },
+  {
+    id: 'memory-personal-09',
+    alt: 'Getayawkal and Shalom posing beside a floral mural',
+  },
+  { id: 'memory-personal-10', alt: 'An embrace beside a floral mural' },
+  {
+    id: 'memory-personal-11',
+    alt: 'Getayawkal and Shalom standing together among flowers',
+  },
+  { id: 'memory-personal-12', alt: 'A quiet selfie resting together' },
+  {
+    id: 'memory-personal-13',
+    alt: 'Getayawkal embracing Shalom beside a floral mural',
+  },
+  { id: 'memory-personal-14', alt: 'Together at a car exhibition' },
+  { id: 'memory-personal-15', alt: 'Holding hands together in a cafe' },
+  {
+    id: 'memory-personal-16',
+    alt: 'Getayawkal and Shalom celebrating together',
+  },
+  { id: 'memory-personal-17', alt: 'A smiling selfie together by the trees' },
+  { id: 'memory-personal-18', alt: 'Getayawkal and Shalom smiling in a lobby' },
+  {
+    id: 'memory-personal-19',
+    alt: 'A nighttime selfie together by a fountain',
+  },
+];
 export const events = [
   {
     number: '01',

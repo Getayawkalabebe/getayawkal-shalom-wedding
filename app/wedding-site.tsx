@@ -19,6 +19,7 @@ import {
   pageNames,
   navigation,
   photos,
+  galleryPhotos,
   events,
   extraAm,
 } from './wedding-data';
@@ -764,20 +765,6 @@ function GuestDetails() {
   );
 }
 
-const memoryPhotos = [
-  ...photos,
-  { id: 'home-portrait', alt: 'A quiet black-and-white wedding portrait' },
-  { id: 'home-forest-mobile', alt: 'Together on the forest path' },
-  {
-    id: 'memory-night-bw',
-    alt: 'Together beneath the city lights in black and white',
-  },
-  {
-    id: 'memory-night-color',
-    alt: 'An evening together in the red convertible',
-  },
-];
-
 function MemoriesSlideshow() {
   return (
     <section className="memories-slideshow" aria-label="Our memories">
@@ -786,7 +773,7 @@ function MemoriesSlideshow() {
         <h2>A lifetime of little moments.</h2>
       </div>
       <MomentsExperience
-        images={memoryPhotos}
+        images={galleryPhotos}
         label="Our memories photo gallery"
       />
     </section>
@@ -1119,56 +1106,15 @@ function PhotoViewer({
   );
 }
 
-function MomentsPage({ onPhoto }: { onPhoto: (n: number) => void }) {
+function MomentsPage() {
   const { t } = useWords();
-  const [grid, setGrid] = useState(false);
-  const [filter, setFilter] = useState('All moments');
   return (
-    <section className={'moments-page ' + (grid ? 'grid-mode' : '')}>
+    <section className="moments-page">
       <div className="moments-heading">
         <Label>{'Little moments. Endless love.'}</Label>
         <h1>{t('Our moments')}</h1>
       </div>
-      <div className="view-switch">
-        <button onClick={() => setGrid(false)} aria-pressed={!grid}>
-          {t('Experience')}
-        </button>
-        <button onClick={() => setGrid(true)} aria-pressed={grid}>
-          {t('Gallery')}
-        </button>
-      </div>
-      {!grid ? (
-        <MomentsExperience onPhoto={onPhoto} />
-      ) : (
-        <>
-          <div className="gallery-filters pill-group">
-            {['All moments', 'Together', 'The promise', 'Little moments'].map(
-              (f) => (
-                <button
-                  key={f}
-                  onClick={() => setFilter(f)}
-                  aria-pressed={f === filter}
-                >
-                  {t(f)}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="photo-grid">
-            {photos.map(
-              (p, i) =>
-                (filter === 'All moments' || filter === p.category) && (
-                  <button key={p.id} onClick={() => onPhoto(i)}>
-                    <div>
-                      <Photo id={p.id} />
-                      <span>↗</span>
-                    </div>
-                  </button>
-                ),
-            )}
-          </div>
-        </>
-      )}
+      <MomentsExperience images={galleryPhotos} />
     </section>
   );
 }
@@ -1867,7 +1813,7 @@ export default function WeddingSite({ initialPage }: { initialPage: string }) {
             ) : page === 'celebration' ? (
               <CelebrationPage />
             ) : page === 'moments' ? (
-              <MomentsPage onPhoto={openPhoto} />
+              <MomentsPage />
             ) : page === 'watch' ? (
               <WatchPage />
             ) : page === 'share' ? (
