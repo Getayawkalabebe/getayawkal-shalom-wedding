@@ -3805,3 +3805,35 @@ html:lang(am) .rsvp-form-panel h2 {
     );
   }
 }
+/* Celebration borrows the blue and cream palette from the removed story section. */
+.text-only-schedule {
+  background: var(--blue);
+  color: var(--paper);
+}
+.text-only-schedule .selector-copy,
+.text-only-schedule .selector-info h3,
+.text-only-schedule .selector-info p {
+  color: var(--paper);
+}
+.text-only-schedule .selector-copy > .label,
+.text-only-schedule .selector-info .fine-text {
+  color: #e6e2ce;
+}
+.text-only-schedule .selector-options button {
+  color: #c4c5b8;
+  transition: color 0.3s;
+}
+.text-only-schedule .selector-options button[aria-selected='true'] {
+  color: var(--paper);
+}
+.text-only-schedule .selector-options button:hover {
+  color: #fff;
+}
+.text-only-schedule .action {
+  color: var(--paper);
+  border-color: #eee9d7aa;
+}
+.text-only-schedule .action:hover {
+  background: var(--paper);
+  color: var(--blue);
+}

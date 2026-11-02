@@ -693,28 +693,6 @@ function CelebrationPreview() {
   );
 }
 
-function BlueStory() {
-  const { t } = useWords();
-  return (
-    <section className="blue-story">
-      <Label>{'A new chapter'}</Label>
-      <Words className="blue-title">{'Together, always.'}</Words>
-      <div className="blue-photos" data-parallax>
-        <Photo id="DSC09204" className="blue-photo-one" />
-        <Photo id="DSC09200" className="blue-photo-two" />
-      </div>
-      <div className="blue-copy" data-reveal>
-        <h3>
-          {t(
-            'Some moments become even more beautiful when shared with the people we love. As we begin our life together, we would be honored to have you beside us.',
-          )}
-        </h3>
-        <Action href="/our-story">{'About us'}</Action>
-      </div>
-    </section>
-  );
-}
-
 function GuestDetails() {
   const { t } = useWords();
   const [selected, setSelected] = useState(0);
@@ -922,7 +900,6 @@ function HomePage() {
       <ScrollChapters />
       <Venue />
       <CelebrationPreview />
-      <BlueStory />
       <GuestDetails />
     </>
   );
@@ -1433,7 +1410,6 @@ function StoryPage() {
           </div>
         </div>
       </section>
-      <BlueStory />
       <section className="faith-section">
         <Label>{'With grateful hearts'}</Label>
         <blockquote lang="am">
