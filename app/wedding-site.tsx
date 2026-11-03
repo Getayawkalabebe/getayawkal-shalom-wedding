@@ -616,7 +616,7 @@ function Venue() {
       <div className="venue-layout">
         <div className="venue-copy" data-reveal>
           <span className="small-index">01 / ADDIS ABABA</span>
-          <h3>{t('Kotabe Full Gospel Church')}</h3>
+          <h3>{t('Kotebe Full Gospel Church')}</h3>
           <p>{t('Addis Ababa, Ethiopia')}</p>
           <div className="ruled-info">
             <span>{t('Our wedding day')}</span>
@@ -819,7 +819,7 @@ function downloadCalendar() {
     'DTSTART:20261121T103000Z',
     'DTEND:20261121T140000Z',
     'SUMMARY:Getayawkal & Shalom Wedding',
-    'LOCATION:Kotabe Full Gospel Church\\, Addis Ababa\\, Ethiopia',
+    'LOCATION:Kotebe Full Gospel Church\\, Addis Ababa\\, Ethiopia',
     'DESCRIPTION:Arrival 1:30 PM EAT. Worship and vows 2:00 PM EAT. Photos 4:00 PM EAT.',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -887,7 +887,7 @@ function HomePage() {
               Saturday, November 21, 2026
             </p>
             <p>
-              Kotabe Full Gospel Church
+              Kotebe Full Gospel Church
               <br />
               Addis Ababa, Ethiopia
             </p>
@@ -971,7 +971,7 @@ function CelebrationPage() {
         <aside className="schedule-filter">
           <Label>{'Our wedding day'}</Label>
           <h2>21.11.2026</h2>
-          <p>{t('Kotabe Full Gospel Church')}</p>
+          <p>{t('Kotebe Full Gospel Church')}</p>
           <div className="pill-group" aria-label="Filter schedule">
             {['All', 'Arrival', 'Ceremony', 'Photos'].map((f) => (
               <button
@@ -1624,7 +1624,7 @@ function Footer({
           <p>
             21 November 2026
             <br />
-            {t('Kotabe Full Gospel Church')}
+            {t('Kotebe Full Gospel Church')}
             <br />
             {t('Addis Ababa, Ethiopia')}
           </p>

@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Getayawkal & Shalom — November 21, 2026',
   description:
-    'An invitation to our forever. November 21, 2026 · Kotabe Full Gospel Church, Addis Ababa.',
+    'An invitation to our forever. November 21, 2026 · Kotebe Full Gospel Church, Addis Ababa.',
   icons: { icon: '/favicon.svg' },
 };
 export default function RootLayout({
